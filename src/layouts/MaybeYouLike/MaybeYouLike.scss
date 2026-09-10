@@ -1,0 +1,204 @@
+@import '../../styles/variables';
+
+.maybe-you-like {
+  padding: 4rem 0;
+  background-color: white;
+  border-top: none;
+  font-family: 'Fredoka', sans-serif;
+  
+  .maybe-you-like-header {
+    margin-bottom: 3rem;
+    
+    .section-title {
+      font-size: 2.8rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      color: $text-dark;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      
+      .highlight {
+        color: $bg-primary;
+        text-shadow: 3px 3px 0px $border-dark;
+        -webkit-text-stroke: 2px $border-dark;
+      }
+    }
+    
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #666666;
+      font-weight: 500;
+    }
+  }
+
+  .status-message {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #666666;
+    border: $border-width dashed $border-dark;
+    border-radius: 12px;
+    background: #fdfbf7;
+
+    i {
+      margin-right: 0.5rem;
+      color: $bg-primary;
+    }
+
+    &.error {
+      color: #ff5252;
+      background: #ffeeee;
+      i { color: #ff5252; }
+    }
+  }
+
+  .books-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+
+  .book-item {
+    background: $bg-white;
+    border: $border-width solid $border-dark;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 4px 4px 0px $border-dark;
+    transition: all 0.2s ease;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0px $border-dark;
+      
+      .book-cover .hover-overlay {
+        opacity: 1;
+      }
+    }
+
+    .book-cover {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      border: 2px solid $border-dark;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f0f0f0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .no-cover {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666666;
+        background: rgba($bg-primary, 0.1);
+      }
+
+      .hover-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        backdrop-filter: blur(2px);
+
+        .read-btn {
+          font-size: 0.9rem;
+          padding: 0.5rem 1rem;
+        }
+      }
+    }
+
+    .book-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+
+      .book-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0;
+        color: $text-dark;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.3;
+      }
+
+      .book-author {
+        font-size: 0.9rem;
+        color: #666666;
+        margin: 0;
+        font-weight: 500;
+        i {
+          color: $btn-primary;
+          margin-right: 0.3rem;
+        }
+      }
+
+      .book-meta {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding-top: 0.5rem;
+        border-top: 2px dashed rgba($border-dark, 0.2);
+
+        .rating i { color: #ffb300; margin-right: 0.2rem; }
+        .views i { color: $bg-success; margin-right: 0.2rem; }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .maybe-you-like {
+    padding: 3rem 0;
+    
+    .maybe-you-like-header {
+      margin-bottom: 2rem;
+      text-align: center;
+      
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+    
+    .books-list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    
+    .book-item {
+      padding: 0.75rem;
+      box-shadow: 2px 2px 0px $border-dark;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 4px 4px 0px $border-dark;
+      }
+      
+      .book-details .book-title {
+        font-size: 1rem;
+      }
+    }
+  }
+}

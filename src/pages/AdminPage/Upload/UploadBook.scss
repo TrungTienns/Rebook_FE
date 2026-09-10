@@ -1,0 +1,348 @@
+// Phối màu Neobrutalism chuẩn mực
+$neo-bg: #f4f0ec;
+$neo-border: #1a1a1a;
+$neo-accent-1: #FF90E8; // Hồng
+$neo-accent-2: #FFC900; // Vàng
+$neo-accent-3: #90FFB4; // Xanh lá
+
+.admin-upload-container {
+  font-family: 'Fredoka', sans-serif;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2rem;
+
+  .admin-title {
+    font-size: 2rem;
+    font-weight: 900;
+    color: $neo-border;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 0px $neo-accent-3;
+    text-align: center;
+
+    i {
+      margin-right: 0.5rem;
+      color: $neo-accent-2;
+      text-shadow: 2px 2px 0px $neo-border;
+    }
+  }
+
+  .tab-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 800;
+      background: white;
+      border: 3px solid $neo-border;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px $neo-border;
+      transition: all 0.2s ease;
+      color: $neo-border;
+
+      &.active {
+        background: $neo-accent-2;
+        transform: translateY(4px) translateX(4px);
+        box-shadow: 0px 0px 0px $neo-border;
+      }
+
+      &:hover:not(.active) {
+        transform: translateY(-2px);
+        box-shadow: 6px 6px 0px $neo-border;
+        background: $neo-accent-1;
+      }
+    }
+  }
+
+  .neo-box {
+    background: white;
+    border: 3px solid $neo-border;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 6px 6px 0px $neo-border;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+
+    .upload-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          font-weight: 800;
+          font-size: 1.1rem;
+          color: $neo-border;
+        }
+
+        input[type="text"], input[type="number"], textarea, select {
+          padding: 0.75rem 1rem;
+          font-size: 0.95rem;
+          font-family: inherit;
+          border: 2px solid $neo-border;
+          border-radius: 8px;
+          background: #fafafa;
+          color: $neo-border;
+          transition: all 0.2s;
+          height: auto;
+          box-sizing: border-box;
+          line-height: 1.5;
+
+          &:focus {
+            outline: none;
+            background: #fff;
+            box-shadow: 4px 4px 0px $neo-accent-1;
+          }
+
+          &.error-input {
+            box-shadow: 4px 4px 0px #ff5252;
+            
+            &:focus {
+              box-shadow: 4px 4px 0px $neo-accent-1;
+            }
+          }
+        }
+      }
+
+      .row-group {
+        flex-direction: row;
+        gap: 1rem;
+        
+        .col {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+      }
+
+      .neo-dropzone {
+        border: 3px dashed $neo-border;
+        background: #fdfbf7;
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 4px 4px 0px $neo-border;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 150px;
+
+        &.active, &:hover {
+          background: rgba($neo-accent-3, 0.2);
+          border-style: solid;
+          transform: translate(-2px, -2px);
+          box-shadow: 6px 6px 0px $neo-border;
+        }
+
+        &.error-input {
+          border-color: #ff5252;
+          box-shadow: 4px 4px 0px #ff5252;
+        }
+
+        .dropzone-placeholder {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+          color: $neo-border;
+          
+          i {
+            color: $neo-accent-2;
+            text-shadow: 2px 2px 0px $neo-border;
+          }
+
+          p {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin: 0;
+          }
+        }
+
+        .dropzone-preview {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+          
+          img {
+            max-height: 120px;
+            object-fit: contain;
+            border: 2px solid $neo-border;
+            border-radius: 8px;
+            box-shadow: 2px 2px 0px $neo-border;
+          }
+
+          p {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin: 0;
+            word-break: break-all;
+            color: $neo-border;
+          }
+        }
+      }
+
+      .neo-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: auto; // Đẩy nút này xuống dưới cùng đáy của form
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: $neo-border;
+        background: $neo-accent-1;
+        border: 3px solid $neo-border;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 4px 4px 0px $neo-border;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+
+        &.pdf-btn {
+          background: $neo-accent-3;
+        }
+
+        &:hover {
+          transform: translate(-2px, -2px);
+          box-shadow: 8px 8px 0px $neo-border;
+        }
+
+        &:active {
+          transform: translate(6px, 6px);
+          box-shadow: 0px 0px 0px $neo-border;
+        }
+      }
+    }
+  }
+
+  .book-list-box {
+    margin-top: 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: $neo-border;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid $neo-border;
+      padding-bottom: 0.5rem;
+    }
+
+    .book-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: 500px;
+    }
+
+    .book-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      border: 3px solid $neo-border;
+      border-radius: 8px;
+      background: #fafafa;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #fff;
+        box-shadow: 4px 4px 0px $neo-border;
+        transform: translate(-2px, -2px);
+      }
+
+      .book-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .book-cover {
+          width: 50px;
+          height: 70px;
+          object-fit: cover;
+          border: 2px solid $neo-border;
+          border-radius: 4px;
+        }
+
+        .book-details {
+          display: flex;
+          flex-direction: column;
+
+          .book-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: $neo-border;
+          }
+
+          .book-category {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .book-actions {
+        display: flex;
+        gap: 0.5rem;
+
+        .action-btn {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 3px solid $neo-border;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.2s;
+          color: $neo-border;
+
+          &.edit {
+            background: $neo-accent-2;
+            &:hover {
+              background: lighten($neo-accent-2, 10%);
+              transform: translate(-2px, -2px);
+              box-shadow: 2px 2px 0px $neo-border;
+            }
+          }
+
+          &.delete {
+            background: #ff5252;
+            color: white;
+            &:hover {
+              background: lighten(#ff5252, 10%);
+              transform: translate(-2px, -2px);
+              box-shadow: 2px 2px 0px $neo-border;
+            }
+          }
+        }
+      }
+    }
+  }
+}

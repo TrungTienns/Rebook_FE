@@ -1,0 +1,169 @@
+@import '../../styles/variables';
+
+.why-choose-us.journey-section {
+  padding: 6rem 2rem;
+  background-color: $bg-white; // Changed back to white as requested
+  font-family: 'Fredoka', sans-serif;
+  border-top: $border-width solid $border-dark;
+  border-bottom: $border-width solid $border-dark;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 5rem;
+      font-size: 3.5rem;
+      color: $text-dark;
+      font-weight: 900;
+      text-shadow: 5px 5px 0px $bg-white;
+      
+      .highlight {
+        color: $btn-primary;
+        text-shadow: 5px 5px 0px $border-dark;
+      }
+    }
+    
+    .journey-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+      align-items: stretch;
+      
+      .journey-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        
+        .card-inner {
+          background-color: $bg-white;
+          border: $border-width solid $border-dark;
+          border-radius: 24px;
+          box-shadow: 8px 8px 0px $border-dark;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          
+          &:hover {
+            transform: translateY(-8px);
+            box-shadow: 12px 12px 0px $border-dark;
+            
+            .card-image-wrapper img {
+              transform: scale(1.05);
+            }
+            
+            .icon-wrapper {
+              transform: rotate(15deg) scale(1.1);
+            }
+          }
+          
+          .card-image-wrapper {
+            position: relative;
+            background-color: #f8f9fa;
+            border-bottom: $border-width solid $border-dark;
+            height: 240px; // Unified height for all cards
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              padding: 1rem;
+              mix-blend-mode: multiply;
+              transition: transform 0.3s ease;
+            }
+            
+            .step-badge {
+              position: absolute;
+              top: 15px;
+              left: 15px;
+              width: 45px;
+              height: 45px;
+              background-color: $bg-primary;
+              color: $text-dark;
+              border: 2px solid $border-dark;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.3rem;
+              font-weight: 900;
+              box-shadow: 3px 3px 0px $border-dark;
+              z-index: 5;
+            }
+          }
+          
+          .card-content {
+            padding: 2.5rem 2rem 2rem 2rem;
+            text-align: left;
+            position: relative;
+            flex-grow: 1;
+            
+            .icon-wrapper {
+              width: 60px;
+              height: 60px;
+              background-color: $bg-success;
+              border: 2px solid $border-dark;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: $text-dark;
+              box-shadow: 3px 3px 0px $border-dark;
+              position: absolute;
+              top: -30px;
+              right: 25px;
+              transition: transform 0.3s ease;
+              z-index: 5;
+            }
+            
+            .step-title {
+              font-size: 1.4rem;
+              font-weight: 800;
+              color: $text-dark;
+              margin: 0 0 1rem 0;
+            }
+            
+            .step-desc {
+              font-size: 1.05rem;
+              color: rgba($text-dark, 0.8);
+              font-weight: 600;
+              line-height: 1.5;
+              margin: 0;
+            }
+          }
+        }
+        
+        // Randomize icon colors
+        &:nth-child(1) .icon-wrapper { background-color: $bg-primary; }
+        &:nth-child(2) .icon-wrapper { background-color: $btn-primary; color: white; }
+        &:nth-child(3) .icon-wrapper { background-color: #ff4081; color: white; }
+        
+        // Randomize step badge colors
+        &:nth-child(1) .step-badge { background-color: $bg-primary; }
+        &:nth-child(2) .step-badge { background-color: $bg-success; }
+        &:nth-child(3) .step-badge { background-color: #80d8ff; }
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .why-choose-us.journey-section {
+    padding: 4rem 1.5rem;
+    
+    .container {
+      .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+      }
+    }
+  }
+}

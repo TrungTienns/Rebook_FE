@@ -1,0 +1,45 @@
+@import '../../styles/variables';
+
+.back-to-top {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  z-index: 999;
+
+  // Cartoon style
+  width: 58px;
+  height: 58px;
+  background-color: $bg-primary;
+  border: $border-width solid $border-dark;
+  border-radius: 16px;
+  box-shadow: 5px 5px 0px $border-dark;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $bg-primary-hover;
+  }
+
+  .btt-arrow {
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1;
+    color: $border-dark;
+  }
+
+  .btt-label {
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: $border-dark;
+    line-height: 1;
+  }
+}

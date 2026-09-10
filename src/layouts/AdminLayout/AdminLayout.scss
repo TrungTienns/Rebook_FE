@@ -1,0 +1,29 @@
+@import '../../styles/variables';
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f0ec; // Neobrutalism off-white background
+  font-family: 'Fredoka', sans-serif;
+  
+  // Ghi đè font mặc định của các thẻ tiêu đề và input
+  h1, h2, h3, h4, h5, h6, p, span, div, input, button, select, textarea {
+    font-family: 'Fredoka', sans-serif !important;
+  }
+  
+  .admin-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; // Prevent flex item from overflowing
+    
+    .admin-content-wrapper {
+      flex: 1;
+      padding: 2rem;
+      
+      @media (max-width: 768px) {
+        padding: 1rem;
+      }
+    }
+  }
+}

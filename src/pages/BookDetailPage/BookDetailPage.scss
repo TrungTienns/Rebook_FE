@@ -1,0 +1,213 @@
+@import '../../styles/variables';
+
+.book-detail-page {
+  background-color: #f4f0ec;
+  padding: 120px 0 2rem 0; 
+  font-family: 'Fredoka', sans-serif;
+
+  .container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .book-detail-box {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    padding: 2rem;
+    background: white;
+    border: 4px solid $border-dark;
+    border-radius: 16px;
+    box-shadow: 8px 8px 0px $border-dark;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+  }
+
+  .book-cover-section {
+    flex: 0 0 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .cover-wrapper {
+      position: relative;
+      width: 100%;
+      border: 4px solid $border-dark;
+      border-radius: 12px;
+      overflow: hidden;
+      background: $bg-primary;
+      box-shadow: 6px 6px 0px $border-dark;
+      aspect-ratio: 2 / 3;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .no-cover {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(0, 0, 0, 0.2);
+      }
+
+      .vip-badge {
+        position: absolute;
+        top: 10px;
+        right: -30px;
+        background: #ffc107;
+        color: black;
+        padding: 5px 35px;
+        font-weight: 800;
+        transform: rotate(45deg);
+        border: 2px solid black;
+        box-shadow: 2px 2px 0px black;
+      }
+    }
+  }
+
+  .book-info-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .book-title {
+      font-size: 2rem;
+      font-weight: 900;
+      color: $text-dark;
+      margin: 0 0 1rem 0;
+      text-shadow: 2px 2px 0px $bg-primary;
+    }
+
+    .book-meta {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+
+      .author {
+        color: $btn-primary;
+      }
+
+      .categories {
+        color: #4CAF50;
+      }
+    }
+
+    .book-stats {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+
+      .stat-item {
+        background: #fff;
+        border: 2px solid $border-dark;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 700;
+        box-shadow: 3px 3px 0px $border-dark;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+          color: $btn-primary;
+        }
+      }
+    }
+
+    .book-description {
+      margin-bottom: 1.5rem;
+      
+      h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.8rem;
+        border-bottom: 3px dashed $border-dark;
+        padding-bottom: 0.5rem;
+        display: inline-block;
+      }
+
+      p {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #444;
+        white-space: pre-line;
+      }
+    }
+
+    .book-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: auto;
+
+      .neo-btn {
+        flex: 1;
+        padding: 0.75rem;
+        font-size: 1.1rem;
+        font-weight: 800;
+        border: 4px solid $border-dark;
+        border-radius: 12px;
+        box-shadow: 6px 6px 0px $border-dark;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+
+        &:hover {
+          transform: translate(-3px, -3px);
+          box-shadow: 9px 9px 0px $border-dark;
+        }
+
+        &:active {
+          transform: translate(4px, 4px);
+          box-shadow: 0px 0px 0px $border-dark;
+        }
+
+        &.primary-action {
+          background: $btn-primary;
+          color: white;
+        }
+
+        &.secondary-action {
+          background: #e0e0e0;
+          color: $text-dark;
+        }
+      }
+    }
+  }
+}
+
+.book-detail-loading, .book-detail-error {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  padding-top: 100px; /* Account for header */
+
+  .neo-btn {
+    margin-top: 1rem;
+    background: $bg-primary;
+    border: 3px solid $border-dark;
+    padding: 0.8rem 1.5rem;
+    font-weight: 700;
+    box-shadow: 4px 4px 0px $border-dark;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+}

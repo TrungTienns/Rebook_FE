@@ -1,0 +1,177 @@
+@import '../../styles/variables';
+
+.cartoon-about {
+  padding: 6rem 2rem;
+  background-color: $bg-white; // neutral background to contrast with header/footer
+  font-family: 'Nunito', sans-serif;
+  overflow: hidden;
+  
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.about-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* ==========================================
+   SPLIT SECTION (LEFT TEXT, RIGHT VISUAL)
+   ========================================== */
+.about-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+.about-content {
+  .section-title {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    color: $text-dark;
+    
+    .highlight-box {
+      display: inline-block;
+      background-color: $bg-success;
+      padding: 0.2rem 1rem;
+      border: $border-width solid $border-dark;
+      border-radius: 12px;
+      box-shadow: 4px 4px 0px $border-dark;
+      transform: rotate(-2deg);
+    }
+  }
+
+  .about-desc {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 2rem;
+    max-width: 65ch; // Taste Skill typography rule
+  }
+
+  .mission-box {
+    background-color: #fff;
+    border: $border-width solid $border-dark;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 4px 4px 0px $border-dark;
+    position: relative;
+    
+    &::before {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      font-size: 2rem;
+      transform: rotate(15deg);
+    }
+
+    .mission-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: $btn-primary;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #444;
+      line-height: 1.5;
+    }
+  }
+}
+
+.about-visual {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: #f0f0f0;
+  border: $border-width solid $border-dark;
+  border-radius: 24px;
+  box-shadow: 8px 8px 0px $border-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  
+  // Pattern background for placeholder
+  background-image: radial-gradient($border-dark 2px, transparent 2px);
+  background-size: 20px 20px;
+  background-color: #ffd700; 
+
+  .visual-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* ==========================================
+   STATS BENTO GRID
+   ========================================== */
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    border: $border-width solid $border-dark;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 4px 4px 0px $border-dark;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    .stat-num {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: $text-dark;
+      text-shadow: 2px 2px 0px white;
+      margin-bottom: 0.5rem;
+      line-height: 1;
+      
+      @media (max-width: 768px) {
+        font-size: 2.5rem;
+      }
+    }
+
+    .stat-label {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: rgba(0,0,0,0.7);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  // Varying background colors for the bento cells
+  .stat-primary {
+    background-color: #00e5ff; // Cyan
+  }
+  .stat-secondary {
+    background-color: #ff4081; // Pink
+    transform: rotate(1deg);
+  }
+  .stat-tertiary {
+    background-color: #b2ff59; // Lime green
+    transform: rotate(-1deg);
+  }
+}

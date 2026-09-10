@@ -1,0 +1,52 @@
+// Reusing the core auth layout styles from SignInLayout
+@import '../SignIn/SignIn.scss';
+
+.sign-up-layout {
+  .auth-form-col {
+    padding: 1.5rem 2rem;
+
+    .auth-title {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .auth-subtitle {
+      margin-bottom: 1rem;
+    }
+
+    .auth-form {
+      gap: 0.8rem;
+
+      .form-group {
+        gap: 0.3rem;
+
+        .auth-input {
+          padding: 0.7rem 1rem;
+        }
+      }
+
+      .auth-submit {
+        margin-top: 0;
+        padding: 0.8rem;
+      }
+    }
+
+    .social-login-container {
+      margin-top: 1rem;
+      gap: 0.8rem;
+
+      .divider {
+        margin: 0.5rem 0;
+      }
+
+      .google-btn {
+        padding: 0.7rem;
+      }
+    }
+
+    .auth-switch {
+      margin-top: 1rem;
+    }
+  }
+}

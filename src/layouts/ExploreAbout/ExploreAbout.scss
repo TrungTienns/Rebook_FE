@@ -1,0 +1,111 @@
+@import '../../styles/variables';
+
+.explore-about {
+  padding: 6rem 2rem;
+  background-color: $bg-white;
+  font-family: 'Fredoka', sans-serif;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .about-header {
+    text-align: center;
+    margin-bottom: 5rem;
+    
+    .section-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: $text-dark;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      display: inline-block;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 5px;
+        left: -5%;
+        width: 110%;
+        height: 15px;
+        background-color: $btn-primary;
+        z-index: -1;
+        transform: rotate(-1deg);
+      }
+    }
+    
+    .section-desc {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: rgba($text-dark, 0.8);
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    
+    .feature-card {
+      border: $border-width solid $border-dark;
+      border-radius: 24px;
+      padding: 3rem 2rem;
+      text-align: center;
+      box-shadow: 10px 10px 0px $border-dark;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: 15px 15px 0px $border-dark;
+      }
+      
+      .feature-icon {
+        width: 80px;
+        height: 80px;
+        background-color: $bg-white;
+        border: 3px solid $border-dark;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem auto;
+        font-size: 2.5rem;
+        color: $text-dark;
+        box-shadow: 4px 4px 0px $border-dark;
+      }
+      
+      .feature-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: $text-dark;
+        margin-bottom: 1rem;
+      }
+      
+      .feature-desc {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: rgba($text-dark, 0.8);
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .explore-about {
+    padding: 4rem 1.5rem;
+    
+    .about-header {
+      margin-bottom: 3rem;
+      
+      .section-title {
+        font-size: 2.5rem;
+      }
+    }
+  }
+}
