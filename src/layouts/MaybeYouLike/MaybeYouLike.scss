@@ -5,10 +5,17 @@
   background-color: white;
   border-top: none;
   font-family: 'Fredoka', sans-serif;
-  
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
   .maybe-you-like-header {
     margin-bottom: 3rem;
-    
+    text-align: center;
+
     .section-title {
       font-size: 2.8rem;
       font-weight: 900;
@@ -16,14 +23,14 @@
       color: $text-dark;
       text-transform: uppercase;
       letter-spacing: 1px;
-      
+
       .highlight {
         color: $bg-primary;
         text-shadow: 3px 3px 0px $border-dark;
         -webkit-text-stroke: 2px $border-dark;
       }
     }
-    
+
     .section-subtitle {
       font-size: 1.1rem;
       color: #666666;
@@ -53,42 +60,33 @@
     }
   }
 
+  // Flexbox để căn giữa hoàn hảo dù có ít hay nhiều sản phẩm
   .books-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 2rem;
   }
 
   .book-item {
-    background: $bg-white;
-    border: $border-width solid $border-dark;
-    border-radius: 12px;
-    padding: 1rem;
+    width: 160px;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    box-shadow: 4px 4px 0px $border-dark;
-    transition: all 0.2s ease;
-    position: relative;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: inherit;
     cursor: pointer;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 6px 6px 0px $border-dark;
-      
-      .book-cover .hover-overlay {
-        opacity: 1;
-      }
-    }
 
     .book-cover {
       position: relative;
       width: 100%;
       aspect-ratio: 2 / 3;
-      border: 2px solid $border-dark;
+      border: $border-width solid $border-dark;
       border-radius: 8px;
       overflow: hidden;
       background: #f0f0f0;
+      box-shadow: 4px 4px 0px $border-dark;
+      transition: all 0.2s ease;
 
       img {
         width: 100%;
@@ -109,62 +107,56 @@
       .hover-overlay {
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.55);
         display: flex;
         align-items: center;
         justify-content: center;
         opacity: 0;
         transition: opacity 0.2s ease;
-        backdrop-filter: blur(2px);
 
-        .read-btn {
-          font-size: 0.9rem;
-          padding: 0.5rem 1rem;
+        .read-tag {
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: white;
+          border: 2px solid white;
+          border-radius: 20px;
+          padding: 0.3rem 0.7rem;
+          white-space: nowrap;
+
+          i { margin-right: 0.3rem; }
         }
       }
     }
 
-    .book-details {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      flex: 1;
+    .book-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0;
+      color: $text-dark;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
 
-      .book-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin: 0;
-        color: $text-dark;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        line-height: 1.3;
-      }
+    // Trạng thái hover / active theo Neobrutalism
+    &:hover .book-cover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0px $border-dark;
+    }
 
-      .book-author {
-        font-size: 0.9rem;
-        color: #666666;
-        margin: 0;
-        font-weight: 500;
-        i {
-          color: $btn-primary;
-          margin-right: 0.3rem;
-        }
-      }
+    &:hover .hover-overlay {
+      opacity: 1;
+    }
 
-      .book-meta {
-        margin-top: auto;
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.85rem;
-        font-weight: 700;
-        padding-top: 0.5rem;
-        border-top: 2px dashed rgba($border-dark, 0.2);
+    &:active .book-cover {
+      transform: translateY(2px);
+      box-shadow: 2px 2px 0px $border-dark;
+    }
 
-        .rating i { color: #ffb300; margin-right: 0.2rem; }
-        .views i { color: $bg-success; margin-right: 0.2rem; }
-      }
+    &:focus-visible .book-cover {
+      outline: 3px solid $btn-primary;
+      outline-offset: 2px;
     }
   }
 }
@@ -172,32 +164,28 @@
 @media (max-width: 768px) {
   .maybe-you-like {
     padding: 3rem 0;
-    
+
     .maybe-you-like-header {
       margin-bottom: 2rem;
       text-align: center;
-      
+
       .section-title {
         font-size: 2rem;
       }
     }
-    
+
     .books-list {
-      grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
     }
-    
+
     .book-item {
-      padding: 0.75rem;
-      box-shadow: 2px 2px 0px $border-dark;
+      width: calc(33.333% - 0.67rem); // 3 items per row with 1rem gap
       
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 4px 4px 0px $border-dark;
+      .book-cover {
+        box-shadow: 2px 2px 0px $border-dark;
       }
-      
-      .book-details .book-title {
-        font-size: 1rem;
+      .book-title {
+        font-size: 0.85rem;
       }
     }
   }

@@ -66,8 +66,8 @@ export default function SignUpLayout() {
       // Create a username from email for manual registration
       const username = email.split('@')[0] + Math.floor(Math.random() * 1000);
       const res = await authService.register({ username, email, password, fullName });
-      if (res.data && res.data.success) {
-        login(res.data.data);
+      if (res?.success) {
+        login(res.data);
         navigate(path.HOME);
       }
     } catch (err) {
@@ -85,8 +85,8 @@ export default function SignUpLayout() {
       const idToken = await result.user.getIdToken();
       
       const res = await authService.firebaseLogin(idToken);
-      if (res.data && res.data.success) {
-        login(res.data.data);
+      if (res?.success) {
+        login(res.data);
         navigate(path.HOME);
       }
     } catch (err) {

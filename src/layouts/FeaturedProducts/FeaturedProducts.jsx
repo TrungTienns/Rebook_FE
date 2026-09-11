@@ -34,7 +34,7 @@ export default function FeaturedProducts() {
     };
 
     fetchProducts();
-  }, [t]);
+  }, []);  // Không thêm `t` — không cần refetch khi đổi ngôn ngữ
 
   return (
     <section className="featured-products">
@@ -75,7 +75,12 @@ export default function FeaturedProducts() {
                     </div>
                   )}
                   {product.coverImageUrl || product.cover_image_url ? (
-                    <img src={product.coverImageUrl || product.cover_image_url} alt={product.title} />
+                    <img
+                    src={product.coverImageUrl || product.cover_image_url}
+                    alt={product.title}
+                    loading="lazy"
+                    decoding="async"
+                  />
                   ) : (
                     <div className="no-image">
                       <i className="fa-solid fa-image fa-3x"></i>

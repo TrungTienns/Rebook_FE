@@ -24,7 +24,13 @@ const productService = {
   delete: (id) => {
     const url = `/books/${id}`;
     return axiosClient.delete(url);
-  }
+  },
+
+  // === SEARCH ===
+  searchBooks: (query) => {
+    if (!query?.trim()) return Promise.resolve({ success: true, data: [] });
+    return axiosClient.get(`/books/search?q=${encodeURIComponent(query.trim())}`);
+  },
 };
 
 export default productService;

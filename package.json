@@ -25,7 +25,9 @@
     "react-i18next": "^17.0.13",
     "react-pdf": "^10.5.0",
     "react-router-dom": "^7.18.3",
+    "react-speech-recognition": "^4.0.1",
     "react-toastify": "^11.1.0",
+    "regenerator-runtime": "^0.14.1",
     "sass": "^1.103.1",
     "sweetalert2": "^11.26.25"
   },

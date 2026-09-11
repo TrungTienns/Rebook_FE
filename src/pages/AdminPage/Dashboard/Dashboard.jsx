@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import './Dashboard.scss';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const stats = [
@@ -90,9 +91,9 @@ export default function Dashboard() {
             <h3>Quick Actions</h3>
           </div>
           <div className="card-body actions-list">
-            <button className="action-btn"><i className="fa-solid fa-plus"></i> Add New Book</button>
-            <button className="action-btn"><i className="fa-solid fa-user-plus"></i> Invite User</button>
-            <button className="action-btn"><i className="fa-solid fa-bullhorn"></i> Create Announcement</button>
+            <Link to="/admin/books" className="action-btn"><i className="fa-solid fa-plus"></i> Add New Book</Link>
+            <Link to="/admin/users" className="action-btn"><i className="fa-solid fa-user-plus"></i> Invite User</Link>
+            <Link to="/admin/announcements" className="action-btn"><i className="fa-solid fa-bullhorn"></i> Create Announcement</Link>
           </div>
         </motion.div>
       </div>

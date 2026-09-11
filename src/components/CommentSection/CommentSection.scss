@@ -1,0 +1,230 @@
+@import '../../styles/variables';
+
+.comment-section {
+  font-family: 'Fredoka', sans-serif;
+  background-color: white !important;
+  border: $border-width solid $border-dark;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 6px 6px 0px $border-dark;
+
+  // ── Section title ──────────────────────────────────────
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0 0 1.5rem 0;
+    border-bottom: 3px dashed $border-dark;
+    padding-bottom: 1rem;
+    i { color: #FF90E8; margin-right: 0.5rem; }
+  }
+
+  // ── Comment input box ──────────────────────────────────
+  .comment-input-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    padding: 0.8rem 1rem;
+    border: $border-width solid $border-dark;
+    border-radius: 12px;
+    background: #fdfbf7;
+    box-shadow: 3px 3px 0px $border-dark;
+    transition: box-shadow 0.2s;
+
+    &:focus-within {
+      box-shadow: 4px 4px 0px $bg-primary;
+      border-color: $border-dark;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid $border-dark;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #f0f0f0;
+      flex-shrink: 0;
+
+      img { width: 100%; height: 100%; object-fit: cover; }
+      i { font-size: 0.85rem; color: #888; }
+    }
+
+    input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      outline: none;
+      color: $text-dark;
+
+      &::placeholder { color: #bbb; font-weight: 500; }
+    }
+
+    .send-btn {
+      font-family: inherit;
+      font-weight: 700;
+      border: 2px solid $border-dark;
+      background: $bg-success;
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px $border-dark;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+
+      &:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0px $border-dark; }
+      &:active { transform: translate(1px, 1px); box-shadow: 0 0 0; }
+      &:focus-visible { outline: 3px solid $bg-primary; outline-offset: 2px; }
+    }
+  }
+
+  // ── Login prompt ──────────────────────────────────────
+  .login-prompt {
+    text-align: center;
+    color: #888;
+    font-weight: 600;
+    padding: 0.5rem;
+    a { color: #FF90E8; text-decoration: underline; font-weight: 700; }
+  }
+
+  // ── Empty state ───────────────────────────────────────
+  .empty-text {
+    text-align: center;
+    color: #888;
+    font-weight: 600;
+    padding: 2.5rem 1rem;
+    i { font-size: 2rem; display: block; margin-bottom: 0.5rem; color: #FF90E8; }
+  }
+
+  // ── Comments list ─────────────────────────────────────
+  .comments-list { display: flex; flex-direction: column; gap: 0.8rem; }
+
+  // ── Comment item ──────────────────────────────────────
+  .comment-item {
+    border-left: 4px solid $border-dark;
+    padding: 0.85rem 1rem;
+    border-radius: 0 10px 10px 0;
+    background: #fdfbf7;
+    transition: all 0.2s;
+
+    &:hover { background: #f8f4ef; }
+
+    &.reply {
+      margin-left: 2.5rem;
+      border-left-color: #FF90E8;
+      background: #fff5fa;
+      font-size: 0.95em;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .avatar {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          border: 2px solid $border-dark;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          background: #f0f0f0;
+          flex-shrink: 0;
+
+          img { width: 100%; height: 100%; object-fit: cover; }
+          i { font-size: 0.7rem; color: #888; }
+        }
+
+        .username { font-weight: 700; font-size: 0.9rem; color: $text-dark; }
+        .time { font-size: 0.8rem; color: #aaa; font-weight: 500; }
+      }
+
+      // Reply button only — no delete button shown in UI
+      .comment-actions {
+        display: flex;
+        gap: 0.3rem;
+
+        .action-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.3rem 0.5rem;
+          font-size: 0.85rem;
+          color: #aaa;
+          border-radius: 6px;
+          transition: all 0.15s;
+
+          &:hover {
+            color: $text-dark;
+            background: #f0ede8;
+          }
+
+          &:focus-visible { outline: 2px solid $bg-primary; }
+        }
+      }
+    }
+
+    .comment-content {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    // ── Inline reply form ──────────────────────────────
+    .reply-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+
+      input {
+        flex: 1;
+        padding: 0.5rem 0.8rem;
+        border: 2px solid $border-dark;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 0.9rem;
+        outline: none;
+        transition: box-shadow 0.2s;
+
+        &:focus { box-shadow: 2px 2px 0px #FF90E8; }
+      }
+
+      .neo-btn-sm {
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.9rem;
+        border: 2px solid $border-dark;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &.primary { background: $bg-success; }
+        &:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0px $border-dark; }
+        &:active { transform: translate(1px, 1px); box-shadow: 0 0 0; }
+      }
+    }
+
+    .replies-list {
+      margin-top: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}

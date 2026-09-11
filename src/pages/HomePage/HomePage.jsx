@@ -9,6 +9,7 @@ import Header from '../../layouts/Header/Header';
 import Footer from '../../layouts/Footer/Footer';
 import BackToTop from '../../components/BackToTop/BackToTop';
 
+
 export default function HomePage() {
   return (
     <>
@@ -18,6 +19,7 @@ export default function HomePage() {
         <AboutUs />
         <WhyChooseUs />
         <FeaturedProducts />
+
       </main>
       <Footer />
       <BackToTop />

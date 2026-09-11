@@ -37,22 +37,10 @@ export default function Banner() {
           </div>
         </div>
 
-        {/* Floating Shapes */}
-        <motion.div 
-          className="shape float-shape shape-star"
-          animate={{ y: [0, -20, 0], rotate: [45, 135, 45] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div 
-          className="shape float-shape shape-circle"
-          animate={{ y: [0, 30, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div 
-          className="shape float-shape shape-square"
-          animate={{ x: [0, -20, 0], rotate: [15, -15, 15] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        />
+        {/* Floating Shapes — CSS animations for GPU performance */}
+        <div className="shape float-shape shape-star" />
+        <div className="shape float-shape shape-circle" />
+        <div className="shape float-shape shape-square" />
       </motion.div>
 
       {/* NỘI DUNG CHÍNH (2 CỘT) */}
@@ -61,7 +49,7 @@ export default function Banner() {
         {/* Cột Trái */}
         <motion.div 
           className="banner-content-left"
-          style={{ y: yLeft, opacity: opacityFade }}
+          style={{ y: yLeft, opacity: opacityFade, willChange: 'transform, opacity' }}
         >
           <motion.div 
             className="hero-heading-container"
@@ -99,7 +87,7 @@ export default function Banner() {
         {/* Cột Phải: Sách */}
         <motion.div 
           className="banner-image-right"
-          style={{ y: yRight, opacity: opacityFade }}
+          style={{ y: yRight, opacity: opacityFade, willChange: 'transform, opacity' }}
         >
           <div className="illustration-container">
             <motion.div 

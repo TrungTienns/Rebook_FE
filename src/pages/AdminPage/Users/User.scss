@@ -1,0 +1,248 @@
+@import '../../../styles/variables';
+
+.admin-users-container {
+  font-family: 'Fredoka', sans-serif;
+
+  .admin-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: $text-dark;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    i {
+      color: $btn-primary;
+    }
+  }
+
+  .neo-box {
+    background-color: $bg-white;
+    border: 4px solid $border-dark;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 8px 8px 0px $border-dark;
+    margin-bottom: 2rem;
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid $border-dark;
+      padding-bottom: 1rem;
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      .user-count {
+        background: $btn-primary;
+        color: $text-dark;
+        font-weight: 700;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        border: 2px solid $border-dark;
+      }
+    }
+  }
+
+  .loading-state, .empty-state {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgba($text-dark, 0.6);
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .neo-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 3px solid $border-dark;
+    border-radius: 12px;
+    overflow: hidden;
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 2px solid $border-dark;
+      border-right: 2px solid $border-dark;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+
+    th {
+      background-color: #f1f2f6;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fcfcfc;
+    }
+
+    /* Column content styles */
+    .user-avatar-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid $border-dark;
+        object-fit: cover;
+      }
+
+      .avatar-placeholder {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: #ffeaa7;
+        border: 2px solid $border-dark;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: $text-dark;
+      }
+
+      .user-names {
+        display: flex;
+        flex-direction: column;
+
+        .full-name {
+          font-weight: 700;
+          font-size: 1.1rem;
+        }
+
+        .username {
+          font-size: 0.9rem;
+          color: rgba($text-dark, 0.7);
+        }
+      }
+    }
+
+    .user-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+
+      span {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+      }
+    }
+
+    .role-select {
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      border: 3px solid;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      background-color: white;
+      transition: all 0.2s;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+      
+      &.admin { background-color: #ffefef; color: #ff4757; }
+      &.moderator { background-color: #fff6e5; color: #ffa502; }
+      &.author { background-color: #ebfaf0; color: #2ed573; }
+      &.reader { background-color: #f1faeb; color: #7bed9f; }
+    }
+
+    .status-badge {
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 2px solid $border-dark;
+      display: inline-block;
+
+      &.active {
+        background-color: #2ed573;
+        color: white;
+      }
+
+      &.banned {
+        background-color: #ff4757;
+        color: white;
+      }
+      
+      &.pending {
+        background-color: #ffa502;
+        color: white;
+      }
+    }
+
+    .neo-btn-action {
+      padding: 0.4rem 0.8rem;
+      border: 2px solid $border-dark;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 2px 2px 0px $border-dark;
+      transition: all 0.1s;
+
+      &:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: 3px 3px 0px $border-dark;
+      }
+
+      &:active {
+        transform: translate(2px, 2px);
+        box-shadow: 0px 0px 0px $border-dark;
+      }
+
+      &.btn-ban {
+        background-color: #ffefef;
+        color: #ff4757;
+      }
+
+      &.btn-unban {
+        background-color: #ebfaf0;
+        color: #2ed573;
+      }
+    }
+
+    .its-you-badge {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      background-color: #f1f2f6;
+      border: 2px dashed rgba($text-dark, 0.5);
+      border-radius: 8px;
+      font-weight: 700;
+      color: rgba($text-dark, 0.6);
+    }
+  }
+}

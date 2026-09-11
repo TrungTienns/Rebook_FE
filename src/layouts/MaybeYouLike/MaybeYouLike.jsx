@@ -16,9 +16,8 @@ export default function MaybeYouLike({ currentBook }) {
     const fetchRelatedBooks = async () => {
       try {
         setLoading(true);
-        // Fetch all books
         const response = await productService.getAll();
-        
+
         let allBooks = [];
         if (response && response.success && Array.isArray(response.data)) {
           allBooks = response.data;
@@ -26,14 +25,10 @@ export default function MaybeYouLike({ currentBook }) {
           allBooks = response;
         }
 
-        // Current book's category IDs
         const currentCategoryIds = currentBook.categories?.map(c => c.id) || [];
 
-        // Filter related books: 
-        // 1. Not the current book
-        // 2. Has at least one overlapping category (if current book has categories)
         let related = allBooks.filter(b => b.id !== currentBook.id);
-        
+
         if (currentCategoryIds.length > 0) {
           related = related.filter(b => {
             const bCategoryIds = b.categories?.map(c => c.id) || [];
@@ -41,8 +36,8 @@ export default function MaybeYouLike({ currentBook }) {
           });
         }
 
-        // Limit to 4-5 books max
-        setBooks(related.slice(0, 4));
+        // Tăng số lượng hiển thị vì mỗi item giờ nhỏ gọn hơn
+        setBooks(related.slice(0, 10));
 
       } catch (err) {
         console.error('Error fetching related books:', err);
@@ -90,7 +85,7 @@ export default function MaybeYouLike({ currentBook }) {
         {!loading && !error && books.length > 0 && (
           <div className="books-list">
             {books.map((book) => (
-              <Link to={`/book/${book.slug}`} className="book-item" key={book.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Link to={`/book/${book.slug}`} className="book-item" key={book.id}>
                 <div className="book-cover">
                   {book.coverImageUrl || book.cover_image_url ? (
                     <img src={book.coverImageUrl || book.cover_image_url} alt={book.title} />
@@ -99,29 +94,15 @@ export default function MaybeYouLike({ currentBook }) {
                       <i className="fa-solid fa-image fa-2x"></i>
                     </div>
                   )}
-                  
+
                   <div className="hover-overlay">
-                    <button className="neo-btn read-btn">
-                      {t('maybeYouLike.readNow')}
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="book-details">
-                  <h3 className="book-title" title={book.title}>{book.title}</h3>
-                  <p className="book-author">
-                    <i className="fa-solid fa-pen-nib"></i> {book.author?.penName || t('maybeYouLike.anonymousAuthor')}
-                  </p>
-                  
-                  <div className="book-meta">
-                    <span className="rating">
-                      <i className="fa-solid fa-star"></i> {book.avg_rating || '0.0'}
-                    </span>
-                    <span className="views">
-                      <i className="fa-solid fa-eye"></i> {book.total_views || 0}
+                    <span className="read-tag">
+                      <i className="fa-solid fa-book-open"></i> {t('maybeYouLike.readNow')}
                     </span>
                   </div>
                 </div>
+
+                <h3 className="book-title" title={book.title}>{book.title}</h3>
               </Link>
             ))}
           </div>

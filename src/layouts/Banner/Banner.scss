@@ -22,7 +22,29 @@ $soul-text-color: #5d4037;
   border: $border-width solid $border-dark;
   box-shadow: 4px 4px 0px $border-dark;
   z-index: 1;
+  will-change: transform;
 }
+
+// CSS Keyframes — more GPU-efficient than JS-driven Framer Motion for infinite loops
+@keyframes floatY {
+  0%, 100% { transform: translateY(0) rotate(45deg); }
+  50%       { transform: translateY(-20px) rotate(135deg); }
+}
+@keyframes floatCircle {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(30px); }
+}
+@keyframes floatSquare {
+  0%, 100% { transform: translateX(0) rotate(15deg); }
+  50%       { transform: translateX(-20px) rotate(-15deg); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shape-star   { animation: floatY      6s ease-in-out infinite; }
+  .shape-circle { animation: floatCircle 4s ease-in-out infinite; }
+  .shape-square { animation: floatSquare 5s ease-in-out infinite; }
+}
+
 
 // ==========================================
 // LAYOUT & BACKGROUND

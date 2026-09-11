@@ -11,28 +11,24 @@ axiosClient.interceptors.request.use(
   (config) => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user.token) {
-        config.headers.Authorization = `Bearer ${user.token}`;
+      try {
+        const user = JSON.parse(storedUser);
+        if (user?.token) {
+          config.headers.Authorization = `Bearer ${user.token}`;
+        }
+      } catch {
+        // localStorage bị corrupt — xóa để tránh vòng lặp lỗi
+        localStorage.removeItem('user');
       }
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Add a response interceptor
 axiosClient.interceptors.response.use(
-  function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    return response.data;
-  },
-  function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    return Promise.reject(error);
-  }
+  (response) => response.data,
+  (error) => Promise.reject(error)
 );
 
 export default axiosClient;

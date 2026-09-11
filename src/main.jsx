@@ -6,7 +6,6 @@ import './index.css'
 import './config/i18n'
 import { AuthProvider } from './context/AuthContext'
 import App from './App.jsx'
-import Header from './layouts/Header/Header.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

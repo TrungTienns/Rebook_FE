@@ -7,7 +7,9 @@ import './BookDetailPage.scss';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import MaybeYouLike from '../../layouts/MaybeYouLike/MaybeYouLike';
-
+import FavoriteButton from '../../components/FavoriteButton/FavoriteButton';
+import RatingSection from '../../components/RatingSection/RatingSection';
+import CommentSection from '../../components/CommentSection/CommentSection';
 export default function BookDetailPage() {
   const { t } = useTranslation();
   const { slug } = useParams();
@@ -24,11 +26,11 @@ export default function BookDetailPage() {
         if (res?.success) {
           setBook(res.data);
         } else {
-          setError('Không thể tải thông tin sách.');
+          setError(t('bookDetail.loadError', 'Không thể tải thông tin sách.'));
         }
       } catch (err) {
         console.error(err);
-        setError('Lỗi khi tải thông tin sách.');
+        setError(t('bookDetail.loadError', 'Lỗi khi tải thông tin sách.'));
       } finally {
         setLoading(false);
       }
@@ -47,7 +49,7 @@ export default function BookDetailPage() {
         <Header />
         <div className="book-detail-loading">
           <i className="fa-solid fa-spinner fa-spin fa-3x"></i>
-          <p>Đang tải thông tin sách...</p>
+          <p>{t('bookDetail.loading', 'Đang tải thông tin sách...')}</p>
         </div>
         <Footer />
       </>
@@ -61,8 +63,8 @@ export default function BookDetailPage() {
         <div className="book-detail-error">
           <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
           <h2>Oops!</h2>
-          <p>{error || 'Không tìm thấy sách.'}</p>
-          <button className="neo-btn" onClick={() => navigate('/')}>Quay Về Trang Chủ</button>
+          <p>{error || t('bookDetail.notFound', 'Không tìm thấy sách.')}</p>
+          <button className="neo-btn" onClick={() => navigate('/')}>{t('bookDetail.backToHome', 'Quay Về Trang Chủ')}</button>
         </div>
         <Footer />
       </>
@@ -125,22 +127,26 @@ export default function BookDetailPage() {
 
               <div className="book-description">
                 <h3><i className="fa-solid fa-book-open"></i> {t('bookDetail.intro')}</h3>
-                <p>{book.description || 'Chưa có thông tin giới thiệu cho sách này.'}</p>
+                <p>{book.description || t('bookDetail.noDescription', 'Chưa có thông tin giới thiệu cho sách này.')}</p>
               </div>
 
               <div className="book-actions">
                 <button className="neo-btn primary-action" onClick={handleReadNow}>
                   <i className="fa-solid fa-book-reader"></i> {t('bookDetail.readNow')}
                 </button>
-                <button className="neo-btn secondary-action">
-                  <i className="fa-solid fa-bookmark"></i> {t('bookDetail.save')}
-                </button>
+                <FavoriteButton bookId={book.id} />
               </div>
             </div>
           </motion.div>
         </div>
       </main>
       <MaybeYouLike currentBook={book} />
+
+      {/* Rating & Comment sections */}
+      <div style={{ maxWidth: '1500px', margin: '0 auto', padding: '0 1rem 2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <RatingSection bookId={book.id} />
+      </div>
+
       <Footer />
     </>
   );
