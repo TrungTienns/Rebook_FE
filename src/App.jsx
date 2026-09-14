@@ -1,5 +1,5 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import './App.css';
 import { path } from './common/path';
@@ -19,6 +19,10 @@ const Dashboard          = lazy(() => import('./pages/AdminPage/Dashboard/Dashbo
 const UploadBook         = lazy(() => import('./pages/AdminPage/Upload/UploadBook'));
 const CategoryManagement = lazy(() => import('./pages/AdminPage/Categories/CategoryManagement'));
 const UserManagement     = lazy(() => import('./pages/AdminPage/Users/User'));
+const CommentManagement  = lazy(() => import('./pages/AdminPage/Comments/CommentManagement'));
+const RatingManagement   = lazy(() => import('./pages/AdminPage/Ratings/RatingManagement'));
+const ChapterManagement  = lazy(() => import('./pages/AdminPage/Chapters/ChapterManagement'));
+const LibraryPage        = lazy(() => import('./pages/LibraryPage/LibraryPage'));
 
 // ── Page loading fallback ────────────────────────────────────────────────────
 function PageLoader() {
@@ -42,6 +46,31 @@ const AdminRoute = ({ children }) => {
   return children;
 };
 
+// ── Scroll to Top on Route Change ────────────────────────────────────────────
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // Lenis handles scrolling, so we must tell Lenis to scroll to top
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { immediate: true });
+    }
+    // Fallback for native scroll
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    // Also try again after a small delay for heavy layouts
+    const timer = setTimeout(() => {
+      if (window.lenis) window.lenis.scrollTo(0, { immediate: true });
+      window.scrollTo(0, 0);
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
+  return null;
+}
+
 // ── App ──────────────────────────────────────────────────────────────────────
 function App() {
   useEffect(() => {
@@ -54,6 +83,8 @@ function App() {
       smoothTouch: false,
       touchMultiplier: 2,
     });
+    
+    window.lenis = lenis; // Expose globally for scroll restoration
 
     let rafId;
 
@@ -83,6 +114,7 @@ function App() {
 
   return (
     <div className="App">
+      <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path={path.HOME}        element={<HomePage />} />
@@ -91,6 +123,7 @@ function App() {
           <Route path={path.SIGN_UP}     element={<SignUpPage />} />
           <Route path={path.BOOK_DETAIL} element={<BookDetailPage />} />
           <Route path={path.BOOK_READ}   element={<PdfReaderPage />} />
+          <Route path={path.MY_LIBRARY}  element={<LibraryPage />} />
 
           {/* Admin Routes */}
           <Route path={path.ADMIN} element={
@@ -100,7 +133,10 @@ function App() {
             <Route path="dashboard"  element={<Dashboard />} />
             <Route path="users"      element={<UserManagement />} />
             <Route path="books"      element={<UploadBook />} />
+            <Route path="chapters"   element={<ChapterManagement />} />
             <Route path="categories" element={<CategoryManagement />} />
+            <Route path="comments"   element={<CommentManagement />} />
+            <Route path="ratings"    element={<RatingManagement />} />
           </Route>
         </Routes>
       </Suspense>

@@ -38,11 +38,35 @@ export default function AdminSidebar() {
         </NavLink>
 
         <NavLink 
+          to="/admin/chapters" 
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+        >
+          <i className="fa-solid fa-file-pdf"></i>
+          <span>Chapters</span>
+        </NavLink>
+
+        <NavLink 
           to="/admin/categories" 
           className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
         >
           <i className="fa-solid fa-tags"></i>
           <span>Categories</span>
+        </NavLink>
+        
+        <NavLink 
+          to="/admin/comments" 
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+        >
+          <i className="fa-solid fa-comments"></i>
+          <span>Comments</span>
+        </NavLink>
+
+        <NavLink 
+          to="/admin/ratings" 
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+        >
+          <i className="fa-solid fa-star"></i>
+          <span>Ratings</span>
         </NavLink>
       </nav>
       

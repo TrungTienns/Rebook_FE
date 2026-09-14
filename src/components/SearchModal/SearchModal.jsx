@@ -31,7 +31,6 @@ export default function SearchModal({ isOpen, onClose }) {
       SpeechRecognition.stopListening();
     } else {
       resetTranscript();
-      // Dùng startsWith để handle cả 'vi' lẫn 'vi-VN'
       const lang = (i18n.resolvedLanguage || i18n.language || '').startsWith('vi')
         ? 'vi-VN'
         : 'en-US';
@@ -42,7 +41,7 @@ export default function SearchModal({ isOpen, onClose }) {
     }
   }, [listening, resetTranscript, i18n.language]);
 
-  // ── Reset khi modal đóng/mở ───────────────────────────────────────────────
+
   useEffect(() => {
     if (isOpen) {
       setSearchTerm('');

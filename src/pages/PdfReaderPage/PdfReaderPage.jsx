@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axiosClient from '../../services/axiosClient';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -15,6 +15,8 @@ export default function PdfReaderPage() {
   const { t } = useTranslation();
   const { slug } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const lang = searchParams.get('lang') || 'vi'; // Default is Vietnamese
   const [pdfUrl, setPdfUrl] = useState('');
   const [bookTitle, setBookTitle] = useState('');
   const [loading, setLoading] = useState(true);
@@ -31,10 +33,26 @@ export default function PdfReaderPage() {
         setLoading(true);
         const res = await axiosClient.get(`/books/${slug}`);
         if (res?.success) {
-          setBookTitle(res.data.title);
           const chapters = res.data.chapters;
-          if (chapters && chapters.length > 0 && chapters[0].pdfUrl) {
-            setPdfUrl(chapters[0].pdfUrl);
+          const targetChapterNum = parseInt(searchParams.get('chapter') || '1', 10);
+          
+          if (chapters && chapters.length > 0) {
+            const currentChapter = chapters.find(c => c.chapterNumber === targetChapterNum) || chapters[0];
+            setBookTitle(`${lang === 'en' && res.data.titleEn ? res.data.titleEn : res.data.title} - Chương ${currentChapter.chapterNumber}`);
+            let targetPdf = null;
+            if (lang === 'en' && currentChapter.pdfUrlEn) {
+              targetPdf = currentChapter.pdfUrlEn;
+            } else if (currentChapter.pdfUrl) {
+              targetPdf = currentChapter.pdfUrl;
+            } else if (currentChapter.pdfUrlEn) {
+              targetPdf = currentChapter.pdfUrlEn;
+            }
+
+            if (targetPdf) {
+              setPdfUrl(targetPdf);
+            } else {
+              setError(t('pdfReader.pdfError'));
+            }
           } else {
             setError(t('pdfReader.pdfError'));
           }
@@ -49,7 +67,7 @@ export default function PdfReaderPage() {
       }
     };
     fetchPdf();
-  }, [slug]);
+  }, [slug, lang]);
 
   const handleBack = () => {
     navigate(-1);

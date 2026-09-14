@@ -96,10 +96,10 @@ export default function BestBooks() {
                   
                   <div className="book-meta">
                     <span className="rating">
-                      <i className="fa-solid fa-star"></i> {book.avg_rating || '5.0'}
+                      <i className="fa-solid fa-star"></i> {book.avgRating || '5.0'}
                     </span>
                     <span className="views">
-                      <i className="fa-solid fa-eye"></i> {book.total_views || 0}
+                      <i className="fa-solid fa-eye"></i> {book.totalViews || 0}
                     </span>
                   </div>
                 </div>

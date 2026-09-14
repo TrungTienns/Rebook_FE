@@ -253,92 +253,93 @@ $neo-accent-3: #90FFB4; // Xanh lá
       padding-bottom: 0.5rem;
     }
 
-    .book-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      min-height: 500px;
-    }
+    .book-table-wrapper {
+      overflow-x: auto;
+      padding: 1rem 0;
 
-    .book-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem;
-      border: 3px solid $neo-border;
-      border-radius: 8px;
-      background: #fafafa;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: #fff;
-        box-shadow: 4px 4px 0px $neo-border;
-        transform: translate(-2px, -2px);
-      }
-
-      .book-info {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-
-        .book-cover {
-          width: 50px;
-          height: 70px;
-          object-fit: cover;
-          border: 2px solid $neo-border;
-          border-radius: 4px;
+      .neo-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 0.5rem;
+        
+        th {
+          text-align: left;
+          padding: 1rem;
+          font-weight: 800;
+          font-size: 1.1rem;
+          color: $neo-border;
+          border-bottom: 3px solid $neo-border;
         }
 
-        .book-details {
-          display: flex;
-          flex-direction: column;
+        td {
+          padding: 1rem;
+          background: white;
+          border-top: 3px solid $neo-border;
+          border-bottom: 3px solid $neo-border;
+          font-weight: 600;
+          vertical-align: middle;
 
-          .book-title {
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: $neo-border;
+          &:first-child {
+            border-left: 3px solid $neo-border;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
           }
 
-          .book-category {
-            font-size: 0.9rem;
-            color: #666;
-            font-weight: 600;
+          &:last-child {
+            border-right: 3px solid $neo-border;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
           }
         }
-      }
 
-      .book-actions {
-        display: flex;
-        gap: 0.5rem;
-
-        .action-btn {
-          width: 40px;
-          height: 40px;
+        .book-name-cell {
           display: flex;
           align-items: center;
-          justify-content: center;
-          border: 3px solid $neo-border;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: all 0.2s;
-          color: $neo-border;
-
-          &.edit {
-            background: $neo-accent-2;
-            &:hover {
-              background: lighten($neo-accent-2, 10%);
-              transform: translate(-2px, -2px);
-              box-shadow: 2px 2px 0px $neo-border;
-            }
+          gap: 0.8rem;
+          
+          .tiny-cover {
+            width: 40px;
+            height: 60px;
+            object-fit: cover;
+            border: 2px solid $neo-border;
+            border-radius: 4px;
           }
+        }
 
-          &.delete {
-            background: #ff5252;
-            color: white;
-            &:hover {
-              background: lighten(#ff5252, 10%);
-              transform: translate(-2px, -2px);
-              box-shadow: 2px 2px 0px $neo-border;
+        .tag {
+          padding: 0.3rem 0.6rem;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 800;
+          border: 2px solid $neo-border;
+          box-shadow: 2px 2px 0px $neo-border;
+          color: white;
+
+          &.tag-vip { background: #ffc107; color: black; }
+          &.tag-free { background: #2ecc71; color: black; }
+        }
+
+        .action-btns {
+          display: flex;
+          gap: 0.8rem;
+          
+          button {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            border: 3px solid $neo-border;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 2px 2px 0px $neo-border;
+
+            &.btn-edit {
+              color: #3498db;
+              &:hover { background: #3498db; color: white; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px $neo-border; }
+            }
+            &.btn-delete {
+              color: #ff5252;
+              &:hover { background: #ff5252; color: white; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px $neo-border; }
             }
           }
         }

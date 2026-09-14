@@ -1,0 +1,531 @@
+@import '../../../styles/variables';
+
+.chapter-management-container {
+  padding: 1rem;
+  
+  .admin-header-box {
+    margin-bottom: 2rem;
+    h1 {
+      font-size: 2.2rem;
+      color: $text-dark;
+      margin-bottom: 0.5rem;
+      i { color: #ff5252; margin-right: 0.5rem; }
+    }
+    p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+  }
+
+  .tab-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 800;
+      background: white;
+      border: 3px solid $border-dark;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px $border-dark;
+      transition: all 0.2s ease;
+      color: $border-dark;
+
+      &.active {
+        background: #FFC900;
+        transform: translateY(4px) translateX(4px);
+        box-shadow: 0px 0px 0px $border-dark;
+      }
+
+      &:hover:not(.active) {
+        transform: translateY(-2px);
+        box-shadow: 6px 6px 0px $border-dark;
+        background: #FF90E8;
+      }
+    }
+  }
+
+  .neo-box {
+    background: white;
+    border: 3px solid $border-dark;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 6px 6px 0px $border-dark;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-wrapper {
+    margin-bottom: 2rem;
+  }
+
+  .upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: $border-dark;
+      }
+
+      input[type="text"], input[type="number"], textarea, select {
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        font-family: inherit;
+        border: 2px solid $border-dark;
+        border-radius: 8px;
+        background: #fafafa;
+        color: $border-dark;
+        transition: all 0.2s;
+        height: auto;
+        box-sizing: border-box;
+        line-height: 1.5;
+
+        &:focus {
+          outline: none;
+          background: #fff;
+          box-shadow: 4px 4px 0px #FF90E8;
+        }
+
+        &.error-input {
+          box-shadow: 4px 4px 0px #ff5252;
+          
+          &:focus {
+            box-shadow: 4px 4px 0px #FF90E8;
+          }
+        }
+      }
+    }
+
+    .row-group {
+      flex-direction: row;
+      gap: 1rem;
+      
+      .col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    .neo-dropzone {
+      border: 3px dashed $border-dark;
+      background: #fdfbf7;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 4px 4px 0px $border-dark;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+
+      &.active, &:hover {
+        background: rgba(#90FFB4, 0.2);
+        border-style: solid;
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0px $border-dark;
+      }
+
+      &.error-input {
+        border-color: #ff5252;
+        box-shadow: 4px 4px 0px #ff5252;
+      }
+
+      .dropzone-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        color: $border-dark;
+        
+        i {
+          color: #FFC900;
+          text-shadow: 2px 2px 0px $border-dark;
+        }
+
+        p {
+          font-weight: 700;
+          font-size: 1.1rem;
+          margin: 0;
+        }
+      }
+
+      .dropzone-preview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        
+        i {
+          text-shadow: 2px 2px 0px $border-dark;
+        }
+
+        p {
+          font-weight: 600;
+          font-size: 0.9rem;
+          margin: 0;
+          word-break: break-all;
+          color: $border-dark;
+        }
+      }
+    }
+
+    .neo-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: auto; // Đẩy nút này xuống dưới cùng đáy của form
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: $border-dark;
+      background: #FF90E8;
+      border: 3px solid $border-dark;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px $border-dark;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+
+      &.pdf-btn {
+        background: #90FFB4;
+      }
+
+      &:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 8px 8px 0px $border-dark;
+      }
+
+      &:active {
+        transform: translate(6px, 6px);
+        box-shadow: 0px 0px 0px $border-dark;
+      }
+    }
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    flex-wrap: wrap;
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex: 1;
+      min-width: 250px;
+
+      i {
+        font-size: 1.2rem;
+        color: #666;
+      }
+
+      input, select {
+        flex: 1;
+        padding: 0.8rem 1rem;
+        border: 3px solid $border-dark;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+
+        &:focus {
+          outline: none;
+          box-shadow: 4px 4px 0px $bg-primary;
+          transform: translate(-2px, -2px);
+        }
+      }
+    }
+  }
+
+  .chapter-table-wrapper {
+    overflow-x: auto;
+    padding: 1rem;
+
+    .neo-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.5rem;
+      
+      th {
+        text-align: left;
+        padding: 1rem;
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: $text-dark;
+        border-bottom: 3px solid $border-dark;
+      }
+
+      td {
+        padding: 1rem;
+        background: white;
+        border-top: 3px solid $border-dark;
+        border-bottom: 3px solid $border-dark;
+        font-weight: 600;
+        vertical-align: middle;
+
+        &:first-child {
+          border-left: 3px solid $border-dark;
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+        }
+
+        &:last-child {
+          border-right: 3px solid $border-dark;
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+        }
+      }
+
+      .book-name-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        
+        .tiny-cover {
+          width: 40px;
+          height: 60px;
+          object-fit: cover;
+          border: 2px solid $border-dark;
+          border-radius: 4px;
+        }
+      }
+
+      .lang-tags {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        padding: 0.3rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        border: 2px solid $border-dark;
+        box-shadow: 2px 2px 0px $border-dark;
+        color: white;
+
+        &.tag-vi { background: #ff5252; }
+        &.tag-en { background: #3498db; }
+        &.tag-none { background: #95a5a6; }
+        &.tag-vip { background: #ffc107; color: black; }
+        &.tag-free { background: #2ecc71; color: black; }
+      }
+
+      .action-btns {
+        display: flex;
+        gap: 0.8rem;
+        
+        button {
+          width: 38px;
+          height: 38px;
+          border-radius: 8px;
+          border: 3px solid $border-dark;
+          background: white;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 2px 2px 0px $border-dark;
+
+          &.btn-edit {
+            color: #3498db;
+            &:hover { background: #3498db; color: white; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px $border-dark; }
+          }
+          &.btn-delete {
+            color: #ff5252;
+            &:hover { background: #ff5252; color: white; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px $border-dark; }
+          }
+        }
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+
+    button {
+      width: 45px;
+      height: 45px;
+      border-radius: 8px;
+      border: 3px solid $border-dark;
+      background: $bg-primary;
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 3px 3px 0px $border-dark;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+      }
+
+      &:not(:disabled):hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 5px 5px 0px $border-dark;
+      }
+    }
+
+    .page-info {
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+  }
+
+  // Edit Modal
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 600px;
+      padding: 2rem;
+      max-height: 90vh;
+      overflow-y: auto;
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        
+        h2 { font-size: 1.8rem; margin: 0; }
+        
+        .btn-close {
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: #666;
+          &:hover { color: #ff5252; }
+        }
+      }
+
+      .edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          label { font-weight: 800; font-size: 1.1rem; }
+          
+          input[type="text"], input[type="number"] {
+            padding: 0.8rem;
+            border: 3px solid $border-dark;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            font-weight: 600;
+            &:focus { outline: none; box-shadow: 4px 4px 0px $bg-primary; }
+          }
+
+          input[type="file"] {
+            padding: 0.5rem;
+            border: 2px dashed $border-dark;
+            border-radius: 8px;
+            cursor: pointer;
+          }
+
+          small { color: #666; font-weight: 600; }
+        }
+
+        .form-group.row {
+          flex-direction: row;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .checkbox-wrap {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
+          label { font-size: 1.1rem; font-weight: 800; cursor: pointer; }
+        }
+
+        .file-upload-section {
+          background: #f8f9fa;
+          padding: 1.5rem;
+          border: 3px solid $border-dark;
+          border-radius: 8px;
+          display: flex;
+          flex-direction: column;
+          gap: 1.2rem;
+        }
+
+        .form-actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 1rem;
+          margin-top: 1rem;
+
+          button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: 3px solid $border-dark;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &.btn-cancel {
+              background: white;
+              box-shadow: 3px 3px 0px $border-dark;
+              &:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px $border-dark; }
+            }
+            &.btn-save {
+              background: $bg-primary;
+              box-shadow: 3px 3px 0px $border-dark;
+              &:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px $border-dark; }
+            }
+          }
+        }
+      }
+    }
+  }
+}

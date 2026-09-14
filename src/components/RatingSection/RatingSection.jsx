@@ -59,6 +59,12 @@ export default function RatingSection({ bookId }) {
     ? (ratings.reduce((sum, r) => sum + r.stars, 0) / ratings.length).toFixed(1)
     : null;
 
+  const totalRatings = ratings.length;
+  const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+  ratings.forEach(r => {
+    if (distribution[r.stars] !== undefined) distribution[r.stars]++;
+  });
+
   // starLabels is an array in the locale — t() returns it directly
   const starLabels = t('ratingSection.starLabels', { returnObjects: true });
 
@@ -128,13 +134,35 @@ export default function RatingSection({ bookId }) {
         </div>
       )}
 
+      {/* ── Rating Overview ── */}
+      <div className="rating-overview neo-box">
+        <div className="overview-left">
+          <div className="big-avg">{avgRating || '0.0'}</div>
+          <div className="stars-avg">{renderStars(Math.round(avgRating || 0))}</div>
+          <div className="total-count">
+            {totalRatings} {t('ratingSection.title')}
+          </div>
+        </div>
+        
+        <div className="overview-right">
+          {[5, 4, 3, 2, 1].map(star => {
+            const count = distribution[star];
+            const percent = totalRatings > 0 ? (count / totalRatings) * 100 : 0;
+            return (
+              <div key={star} className="dist-row">
+                <span className="dist-star">{star} <i className="fa-solid fa-star" /></span>
+                <div className="dist-bar-container">
+                  <div className="dist-bar-fill" style={{ width: `${percent}%` }}></div>
+                </div>
+                <span className="dist-count">{count}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* ── Rating list ── */}
-      {ratings.length === 0 ? (
-        <p className="empty-text">
-          <i className="fa-regular fa-star" />
-          {t('ratingSection.empty')}
-        </p>
-      ) : (
+      {ratings.length > 0 && (
         <div className="rating-list">
           {ratings.map(r => (
             <div key={r.id} className="rating-item">
@@ -147,6 +175,9 @@ export default function RatingSection({ bookId }) {
                 <div className="info">
                   <span className="username">
                     {r.user?.fullName || r.user?.username || t('ratingSection.anonymous')}
+                    {user && r.userId === user.id && (
+                      <span className="you-badge">{t('ratingSection.you')}</span>
+                    )}
                   </span>
                   <div className="stars">{renderStars(r.stars)}</div>
                 </div>

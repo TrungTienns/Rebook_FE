@@ -50,7 +50,7 @@ export default function Header() {
         <nav className={`nav-menu ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
           <Link to={path.HOME} className={`nav-link ${location.pathname === path.HOME ? 'active' : ''}`}>{t('header.home')}</Link>
           <Link to={path.EXPLORE} className={`nav-link ${location.pathname.startsWith(path.EXPLORE) ? 'active' : ''}`}>{t('header.explore')}</Link>
-          <a href="library" className="nav-link">{t('header.library')}</a>
+          <Link to={path.MY_LIBRARY} className={`nav-link ${location.pathname.startsWith(path.MY_LIBRARY) ? 'active' : ''}`}>{t('header.library')}</Link>
           <a href="#community" className="nav-link">{t('header.community')}</a>
         </nav>
 

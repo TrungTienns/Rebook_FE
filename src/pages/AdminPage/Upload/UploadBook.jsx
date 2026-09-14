@@ -7,19 +7,19 @@ import Swal from 'sweetalert2';
 import { useDropzone } from 'react-dropzone';
 
 export default function UploadBook() {
-  const [activeTab, setActiveTab] = useState('book'); // 'book' hoặc 'chapter'
+  const [activeTab, setActiveTab] = useState('create'); // 'create' hoặc 'manage'
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   
-  // State form Sách
-  const [bookData, setBookData] = useState({ title: '', authorName: '', categoryId: '', description: '', coverImage: null });
+  const [bookData, setBookData] = useState({ title: '', titleEn: '', authorName: '', categoryId: '', description: '', coverImage: null, isVip: 'false', vipPrice: 0 });
   const [isEditingBook, setIsEditingBook] = useState(false);
   const [editBookId, setEditBookId] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
   
-  // State form Chương
-  const [chapterData, setChapterData] = useState({ bookId: '', chapterNumber: '', title: '', file_pdf: null });
-
+  // Filters for book list
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortFilter, setSortFilter] = useState('newest'); // 'newest', 'oldest', 'a-z'
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  
   // State lỗi validation
   const [errors, setErrors] = useState({});
 
@@ -37,32 +37,25 @@ export default function UploadBook() {
     multiple: false
   });
 
-  // Dropzone cho file PDF
-  const onDropPdf = (acceptedFiles) => {
-    if (acceptedFiles && acceptedFiles.length > 0) {
-      setChapterData({...chapterData, file_pdf: acceptedFiles[0]});
-      setErrors({...errors, file_pdf: false});
-    }
-  };
 
-  const { getRootProps: getPdfRootProps, getInputProps: getPdfInputProps, isDragActive: isPdfDragActive } = useDropzone({ 
-    onDrop: onDropPdf,
-    accept: { 'application/pdf': ['.pdf'] },
-    multiple: false
-  });
 
-  // Tải danh sách sách để chọn khi up chương và hiển thị danh sách
-  useEffect(() => {
-    fetchBooks();
-    fetchCategories();
-  }, []);
 
   const fetchBooks = async () => {
     try {
-      const res = await axiosClient.get('/books');
-      if (res?.success) setBooks(res.data); // <-- Đã sửa
-    } catch (error) {
-      console.error('Lỗi khi tải danh sách sách:', error);
+      const params = {};
+      if (searchQuery) params.q = searchQuery;
+      if (sortFilter !== 'newest') params.sort = sortFilter;
+      
+      // If user selected a specific category ID, we need its slug because backend uses category=slug
+      if (categoryFilter !== 'all') {
+        const cat = categories.find(c => c.id.toString() === categoryFilter.toString());
+        if (cat) params.category = cat.slug;
+      }
+      
+      const res = await axiosClient.get('/books', { params });
+      if (res?.success) setBooks(res.data);
+    } catch {
+      console.error('Lỗi khi tải danh sách sách');
     }
   };
 
@@ -70,10 +63,19 @@ export default function UploadBook() {
     try {
       const res = await axiosClient.get('/categories');
       if (res?.success) setCategories(res.data);
-    } catch (error) {
-      console.error('Lỗi khi tải thể loại:', error);
+    } catch {
+      console.error('Lỗi khi tải thể loại');
     }
   };
+
+  useEffect(() => {
+    fetchBooks();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, sortFilter, categoryFilter, categories]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleBookSubmit = async (e) => {
     e.preventDefault();
@@ -94,9 +96,12 @@ export default function UploadBook() {
 
     const formData = new FormData();
     formData.append('title', bookData.title);
+    if (bookData.titleEn) formData.append('titleEn', bookData.titleEn);
     if (bookData.authorName) formData.append('authorName', bookData.authorName); 
     if (bookData.categoryId) formData.append('categoryId', bookData.categoryId); 
     formData.append('description', bookData.description);
+    formData.append('isVip', bookData.isVip);
+    formData.append('vipPrice', bookData.vipPrice);
     if (bookData.coverImage) formData.append('coverImage', bookData.coverImage);
 
     // Bật Loading Swal
@@ -122,7 +127,7 @@ export default function UploadBook() {
           toast.success(' Cập nhật sách thành công!');
           setIsEditingBook(false);
           setEditBookId(null);
-          setBookData({ title: '', authorName: '', categoryId: '', description: '', coverImage: null });
+          setBookData({ title: '', titleEn: '', authorName: '', categoryId: '', description: '', coverImage: null, isVip: 'false', vipPrice: 0 });
           setErrors({});
           fetchBooks();
         }
@@ -133,7 +138,7 @@ export default function UploadBook() {
         if (res?.success) { 
           Swal.close();
           toast.success('🎉 Đăng sách thành công!');
-          setBookData({ title: '', authorName: '', categoryId: '', description: '', coverImage: null });
+          setBookData({ title: '', titleEn: '', authorName: '', categoryId: '', description: '', coverImage: null, isVip: 'false', vipPrice: 0 });
           setErrors({});
           fetchBooks();
         }
@@ -149,10 +154,13 @@ export default function UploadBook() {
     setEditBookId(book.id);
     setBookData({
       title: book.title || '',
+      titleEn: book.titleEn || '',
       authorName: book.author?.penName || '',
-      categoryId: book.categories && book.categories.length > 0 ? book.categories[0].id : '',
+      categoryId: book.categories?.[0]?.id || '',
       description: book.description || '',
-      coverImage: null
+      coverImage: null,
+      isVip: book.isVip ? 'true' : 'false',
+      vipPrice: book.vipPrice || 0
     });
     setErrors({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -185,65 +193,13 @@ export default function UploadBook() {
               setBookData({ title: '', authorId: '', categoryId: '', description: '', coverImage: null });
             }
           }
-        } catch (error) {
+        } catch {
           toast.error('Lỗi khi xóa sách');
         }
       }
     });
   };
 
-  const handleChapterSubmit = async (e) => {
-    e.preventDefault();
-
-    // Custom Validation
-    let newErrors = {};
-    if (!chapterData.bookId) newErrors.bookId = true;
-    if (!chapterData.chapterNumber) newErrors.chapterNumber = true;
-    if (!chapterData.title) newErrors.chapterTitle = true;
-    if (!chapterData.file_pdf) newErrors.file_pdf = true;
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) {
-      toast.error(' Vui lòng điền đầy đủ thông tin chương (Sách, Số chương, Tên, File PDF)!');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('bookId', chapterData.bookId);
-    formData.append('chapterNumber', chapterData.chapterNumber);
-    formData.append('title', chapterData.title);
-    if (chapterData.file_pdf) formData.append('file_pdf', chapterData.file_pdf);
-
-    // Bật Loading Swal
-    Swal.fire({
-      title: 'Đang tải PDF...',
-      text: 'File PDF đang được upload, vui lòng không tắt trang!',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-      customClass: {
-        popup: 'neo-popup'
-      }
-    });
-
-    try {
-      const res = await axiosClient.post('/chapters', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      if (res?.success) { // <-- Đã sửa
-        Swal.close();
-        toast.success('🎉 Tải chương truyện (PDF) thành công!');
-        setChapterData({ ...chapterData, chapterNumber: '', title: '', file_pdf: null });
-        setErrors({});
-      }
-    } catch (error) {
-      Swal.close();
-      const errorMessage = error.response?.data?.message || 'Lỗi khi tải chương mới';
-      toast.error(errorMessage);
-    }
-  };
 
   return (
     <div className="admin-upload-container">
@@ -252,11 +208,11 @@ export default function UploadBook() {
       </h2>
       
       <div className="tab-switcher">
-        <button className={`tab-btn ${activeTab === 'book' ? 'active' : ''}`} onClick={() => { setActiveTab('book'); setErrors({}); }}>
-          <i className="fa-solid fa-plus-circle"></i> Tạo Sách Mới
+        <button className={`tab-btn ${activeTab === 'create' ? 'active' : ''}`} onClick={() => { setActiveTab('create'); setErrors({}); }}>
+          <i className="fa-solid fa-plus-circle"></i> {isEditingBook ? 'Chỉnh Sửa Sách' : 'Tạo Sách Mới'}
         </button>
-        <button className={`tab-btn ${activeTab === 'chapter' ? 'active' : ''}`} onClick={() => { setActiveTab('chapter'); setErrors({}); }}>
-          <i className="fa-solid fa-file-pdf"></i> Upload Chương (PDF)
+        <button className={`tab-btn ${activeTab === 'manage' ? 'active' : ''}`} onClick={() => { setActiveTab('manage'); setErrors({}); }}>
+          <i className="fa-solid fa-list"></i> Quản Lý Sách
         </button>
       </div>
 
@@ -264,14 +220,18 @@ export default function UploadBook() {
         key={activeTab} 
         initial={{ opacity: 0, y: 10 }} 
         animate={{ opacity: 1, y: 0 }} 
-        className="form-wrapper neo-box"
       >
-        {activeTab === 'book' ? (
-          <form onSubmit={handleBookSubmit} className="upload-form" noValidate>
+        {activeTab === 'create' ? (
+          <div className="form-wrapper neo-box">
+            <form onSubmit={handleBookSubmit} className="upload-form" noValidate>
             <div className="form-group row-group">
               <div className="col">
-                <label>Tên Sách</label>
+                <label>Tên Sách (Tiếng Việt)</label>
                 <input type="text" className={errors.title ? 'error-input' : ''} value={bookData.title} onChange={e => { setBookData({...bookData, title: e.target.value}); setErrors({...errors, title: false}); }} required placeholder="Nhập tên sách..." />
+              </div>
+              <div className="col">
+                <label>Tên Sách (Tiếng Anh) <span style={{fontSize: '0.8rem', color: '#666'}}>- Tuỳ chọn</span></label>
+                <input type="text" value={bookData.titleEn} onChange={e => setBookData({...bookData, titleEn: e.target.value})} placeholder="English Title..." />
               </div>
               <div className="col">
                 <label>Tác Giả</label>
@@ -285,6 +245,37 @@ export default function UploadBook() {
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
                 </select>
+              </div>
+            </div>
+            
+            <div className="form-group row-group" style={{ marginBottom: '1.5rem' }}>
+              <div className="col">
+                <label>Loại Sách</label>
+                <select 
+                  value={bookData.isVip} 
+                  onChange={e => { 
+                    const isVipValue = e.target.value;
+                    setBookData({
+                      ...bookData, 
+                      isVip: isVipValue, 
+                      vipPrice: isVipValue === 'false' ? 0 : bookData.vipPrice 
+                    }); 
+                  }}
+                >
+                  <option value="false">Miễn Phí (Free)</option>
+                  <option value="true">Sách VIP</option>
+                </select>
+              </div>
+              <div className="col">
+                <label>Giá VIP (Xu) {bookData.isVip === 'false' && <small>(Khóa)</small>}</label>
+                <input 
+                  type="number" 
+                  min="0"
+                  disabled={bookData.isVip === 'false'}
+                  value={bookData.vipPrice} 
+                  onChange={e => setBookData({...bookData, vipPrice: e.target.value})} 
+                  placeholder={bookData.isVip === 'true' ? "Nhập giá VIP..." : "0"} 
+                />
               </div>
             </div>
             <div className="form-group">
@@ -323,128 +314,102 @@ export default function UploadBook() {
               )}
             </div>
           </form>
+          </div>
         ) : (
-          <form onSubmit={handleChapterSubmit} className="upload-form" noValidate>
-            <div className="form-group">
-              <label>Chọn Sách</label>
-              <select className={errors.bookId ? 'error-input' : ''} value={chapterData.bookId} onChange={e => { setChapterData({...chapterData, bookId: e.target.value}); setErrors({...errors, bookId: false}); }} required>
-                <option value="">-- Chọn một cuốn sách --</option>
-                {books.map(book => (
-                  <option key={book.id} value={book.id}>{book.title}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group row-group">
-              <div className="col">
-                <label>Chương Số</label>
-                <input type="number" min="1" className={errors.chapterNumber ? 'error-input' : ''} value={chapterData.chapterNumber} onChange={e => { setChapterData({...chapterData, chapterNumber: e.target.value}); setErrors({...errors, chapterNumber: false}); }} required placeholder="VD: 1" />
-              </div>
-              <div className="col">
-                <label>Tên Chương</label>
-                <input type="text" className={errors.chapterTitle ? 'error-input' : ''} value={chapterData.title} onChange={e => { setChapterData({...chapterData, title: e.target.value}); setErrors({...errors, chapterTitle: false}); }} required placeholder="VD: Khởi nguyên" />
-              </div>
-            </div>
-            <div className="form-group">
-              <label>File Nội Dung (PDF)</label>
-              <div 
-                {...getPdfRootProps()} 
-                className={`neo-dropzone ${isPdfDragActive ? 'active' : ''} ${errors.file_pdf ? 'error-input' : ''}`}
-                style={{ height: 'auto', minHeight: '150px' }}
-              >
-                <input {...getPdfInputProps()} />
-                {chapterData.file_pdf ? (
-                  <div className="dropzone-preview" style={{ gap: '0.5rem' }}>
-                    <i className="fa-solid fa-file-pdf fa-3x" style={{ color: '#ff5252' }}></i>
-                    <p style={{ margin: 0, fontWeight: '700', fontSize: '1.1rem' }}>{chapterData.file_pdf.name}</p>
-                    <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>{(chapterData.file_pdf.size / 1024 / 1024).toFixed(2)} MB</p>
-                    <button type="button" className="neo-btn" style={{ padding: '0.4rem 1rem', fontSize: '0.9rem', marginTop: '0.5rem', background: '#ffd700', color: 'black' }} onClick={(e) => { e.stopPropagation(); setChapterData({...chapterData, file_pdf: null}); }}>Đổi File Khác</button>
-                  </div>
-                ) : (
-                  <div className="dropzone-placeholder">
-                    <i className="fa-solid fa-file-pdf fa-3x" style={{ color: '#1a1a1a' }}></i>
-                    <p style={{ margin: 0, fontWeight: '700', fontSize: '1.1rem', color: '#1a1a1a' }}>
-                      {isPdfDragActive ? "Thả file PDF vào đây..." : "Kéo thả file PDF hoặc click để chọn"}
-                    </p>
-                    <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>Chỉ chấp nhận định dạng .pdf</p>
-                  </div>
-                )}
+          <div className="neo-box book-list-box">
+            <div className="list-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem', borderBottom: '3px solid #1a1a1a', paddingBottom: '0.5rem' }}>
+              <h3 style={{ margin: 0, borderBottom: 'none', paddingBottom: 0 }}><i className="fa-solid fa-list-ul"></i> Sách Hiện Có ({books.length})</h3>
+              
+              <div className="filter-controls" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <div className="search-box" style={{ position: 'relative' }}>
+                  <i className="fa-solid fa-search" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#666' }}></i>
+                  <input 
+                    type="text" 
+                    placeholder="Tìm theo tên..." 
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{ paddingLeft: '2rem', padding: '0.5rem 0.5rem 0.5rem 2.5rem', borderRadius: '8px', border: '3px solid #1a1a1a', fontWeight: 'bold' }}
+                  />
+                </div>
+                
+                <select 
+                  value={categoryFilter} 
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  style={{ padding: '0.5rem', borderRadius: '8px', border: '3px solid #1a1a1a', fontWeight: 'bold' }}
+                >
+                  <option value="all">Tất cả thể loại</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+                
+                <select 
+                  value={sortFilter} 
+                  onChange={(e) => setSortFilter(e.target.value)}
+                  style={{ padding: '0.5rem', borderRadius: '8px', border: '3px solid #1a1a1a', fontWeight: 'bold' }}
+                >
+                  <option value="newest">Mới nhất trước</option>
+                  <option value="oldest">Cũ nhất trước</option>
+                  <option value="a-z">Tên: A-Z</option>
+                  <option value="z-a">Tên: Z-A</option>
+                </select>
               </div>
             </div>
-            <button type="submit" className="neo-btn pdf-btn">
-              <i className="fa-solid fa-upload"></i> Upload PDF
-            </button>
-          </form>
-        )}
-      </motion.div>
-
-      {/* Danh sách sách hiện có */}
-      {activeTab === 'book' && (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="neo-box book-list-box">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '3px solid #1a1a1a', paddingBottom: '0.5rem' }}>
-            <h3 style={{ margin: 0, borderBottom: 'none', paddingBottom: 0 }}>Danh Sách Sách Hiện Có</h3>
-            <div className="search-bar" style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
-              <i className="fa-solid fa-search" style={{ color: '#1a1a1a', fontSize: '1.2rem' }}></i>
-              <input 
-                type="text" 
-                placeholder="Tìm kiếm sách..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  padding: '0.6rem 1rem',
-                  border: '3px solid #1a1a1a',
-                  borderRadius: '8px',
-                  fontFamily: 'inherit',
-                  outline: 'none',
-                  background: '#2d2d2d',
-                  color: '#ffffff',
-                  fontWeight: '600',
-                  boxShadow: '4px 4px 0px #1a1a1a',
-                  width: '250px'
-                }}
-              />
+            
+            <div className="book-table-wrapper">
+              <table className="neo-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Sách</th>
+                    <th>Tác Giả</th>
+                    <th>Chương</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {books.filter(b => b.title.toLowerCase().includes(searchQuery.toLowerCase()) || b.id.toString().includes(searchQuery)).map(book => (
+                    <tr key={book.id}>
+                      <td>#{book.id}</td>
+                      <td className="book-name-cell">
+                        {book.coverImageUrl || book.cover_image_url ? (
+                          <img src={book.coverImageUrl || book.cover_image_url} alt={book.title} className="tiny-cover"/>
+                        ) : (
+                          <div className="tiny-cover" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#e0e0e0'}}>
+                            <i className="fa-solid fa-image" style={{color: '#999'}}></i>
+                          </div>
+                        )}
+                        <span>{book.title}</span>
+                      </td>
+                      <td>{book.author?.penName || 'Không rõ'}</td>
+                      <td><b>{book.totalChapters || 0}</b></td>
+                      <td>
+                        {book.isVip ? <span className="tag tag-vip"><i className="fa-solid fa-crown"></i> VIP</span> : <span className="tag tag-free">Free</span>}
+                      </td>
+                      <td>
+                        <div className="action-btns">
+                          <button className="btn-edit" onClick={() => { handleEditBook(book); setActiveTab('create'); }}>
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button className="btn-delete" onClick={() => handleDeleteBook(book.id)}>
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {books.length === 0 && (
+                    <tr>
+                      <td colSpan="6" style={{textAlign: 'center', padding: '2rem'}}>Chưa có cuốn sách nào. Hãy tạo mới!</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
-          
-          {books.length === 0 ? (
-            <div className="empty-state" style={{ minHeight: '500px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Chưa có sách nào. Hãy tạo mới!</div>
-          ) : (
-            <div className="book-list">
-              {books
-                .filter(book => book.title.toLowerCase().includes(searchQuery.toLowerCase()) || book.id.toString().includes(searchQuery))
-                .length === 0 ? (
-                  <div className="empty-state" style={{ minHeight: '500px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Không tìm thấy sách phù hợp!</div>
-                ) : (
-                  books
-                    .filter(book => book.title.toLowerCase().includes(searchQuery.toLowerCase()) || book.id.toString().includes(searchQuery))
-                    .map(book => (
-                <div key={book.id} className="book-item">
-                  <div className="book-info">
-                    {book.coverImageUrl || book.cover_image_url ? (
-                      <img src={book.coverImageUrl || book.cover_image_url} alt={book.title} className="book-cover" />
-                    ) : (
-                      <div className="book-cover no-cover"><i className="fa-solid fa-image"></i></div>
-                    )}
-                    <div className="book-details">
-                      <span className="book-title">{book.title} <span style={{ fontSize: '0.8rem', color: '#666', background: '#eee', padding: '2px 6px', borderRadius: '4px', marginLeft: '0.5rem', border: '1px solid #1a1a1a' }}>ID: {book.id}</span></span>
-                      <span className="book-category">
-                        {book.categories && book.categories.length > 0 ? book.categories.map(c => c.name).join(', ') : 'Chưa phân loại'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="book-actions">
-                    <button type="button" className="action-btn edit" onClick={() => handleEditBook(book)} title="Sửa">
-                      <i className="fa-solid fa-pen"></i>
-                    </button>
-                    <button type="button" className="action-btn delete" onClick={() => handleDeleteBook(book.id)} title="Xóa">
-                      <i className="fa-solid fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              )))}
-            </div>
-          )}
-        </motion.div>
-      )}
+        )}
+      </motion.div>
     </div>
   );
 }
