@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import userService from '../../services/userService';
 import { useAuth } from '../../context/AuthContext';
@@ -14,12 +14,6 @@ export default function RatingSection({ bookId }) {
   const [selectedStar, setSelectedStar] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const [showForm, setShowForm] = useState(false);
-
-  useEffect(() => {
-    if (!bookId) return;
-    fetchRatings();
-    if (user) fetchMyRating();
-  }, [bookId, user]);
 
   const fetchRatings = async () => {
     try {
@@ -38,6 +32,13 @@ export default function RatingSection({ bookId }) {
       }
     } catch (err) { console.error(err); }
   };
+
+  useEffect(() => {
+    if (!bookId) return;
+    fetchRatings();
+    if (user) fetchMyRating();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bookId, user]);
 
   const handleSubmit = async () => {
     if (!user) { toast.warning(t('ratingSection.loginRequired')); return; }

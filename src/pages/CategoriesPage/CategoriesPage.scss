@@ -1,0 +1,238 @@
+$neo-bg: #f4f0ec;
+$neo-border: #1a1a1a;
+$neo-accent-1: #FF90E8; // Hồng
+$neo-accent-2: #FFC900; // Vàng
+$neo-accent-3: #90FFB4; // Xanh lá
+$neo-accent-4: #8B93FF; // Xanh dương nhạt
+$neo-accent-5: #FF9A76; // Cam nhạt
+
+.categories-page {
+  font-family: 'Fredoka', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $neo-bg;
+  /* Add subtle background pattern */
+  background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: -19px -19px;
+
+  .categories-content {
+    flex: 1;
+    /* Fix overlap with header */
+    padding: 150px 1.5rem 5rem 1.5rem; 
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border: 4px solid $neo-border;
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      box-shadow: 10px 10px 0px $neo-border;
+    }
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+
+    .page-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: $neo-border;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      text-shadow: 4px 4px 0px $neo-accent-2;
+      
+      i {
+        color: $neo-accent-1;
+        margin-right: 1rem;
+        text-shadow: 3px 3px 0px $neo-border;
+      }
+    }
+
+    .page-desc {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #444;
+      background: $neo-accent-3;
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border: 3px solid $neo-border;
+      border-radius: 30px;
+      box-shadow: 4px 4px 0px $neo-border;
+    }
+  }
+
+  .loading-state, .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 0;
+    gap: 1.5rem;
+    color: $neo-border;
+    font-weight: 700;
+    font-size: 1.5rem;
+
+    i {
+      color: $neo-accent-4;
+      text-shadow: 3px 3px 0px $neo-border;
+    }
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .category-card {
+    border: 4px solid $neo-border;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 8px 8px 0px $neo-border;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    position: relative;
+
+    &:nth-child(5n + 1) .card-content { background: $neo-accent-1; }
+    &:nth-child(5n + 2) .card-content { background: $neo-accent-2; }
+    &:nth-child(5n + 3) .card-content { background: $neo-accent-3; }
+    &:nth-child(5n + 4) .card-content { background: $neo-accent-4; }
+    &:nth-child(5n + 5) .card-content { background: $neo-accent-5; }
+
+    &:hover {
+      transform: translate(-5px, -5px) rotate(-1.5deg);
+      box-shadow: 13px 13px 0px $neo-border;
+      
+      .card-image-wrapper img {
+        transform: scale(1.1);
+      }
+      
+      .go-btn {
+        background: #fff;
+        color: $neo-border;
+        transform: translateX(5px);
+      }
+    }
+
+    &:active {
+      transform: translate(2px, 2px) rotate(0deg);
+      box-shadow: 4px 4px 0px $neo-border;
+    }
+
+    .card-image-wrapper {
+      width: 100%;
+      height: 180px;
+      border-bottom: 4px solid $neo-border;
+      background: #f4f0ec;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+      }
+
+      .no-image-placeholder {
+        font-size: 4rem;
+        color: $neo-border;
+        opacity: 0.3;
+      }
+
+      .book-count-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: $neo-border;
+        color: white;
+        font-weight: 800;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 2px solid white;
+        box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+
+      .cat-name {
+        font-size: 1.6rem;
+        font-weight: 900;
+        color: $neo-border;
+        margin: 0;
+        line-height: 1.2;
+      }
+
+      .go-btn {
+        background: $neo-border;
+        color: white;
+        border: 3px solid $neo-border;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .categories-content {
+      padding: 130px 1rem 3rem 1rem;
+      
+      .container {
+        padding: 2rem 1rem;
+        border-width: 3px;
+        border-radius: 12px;
+      }
+    }
+
+    .page-header {
+      .page-title {
+        font-size: 2.2rem;
+      }
+      .page-desc {
+        font-size: 1rem;
+        padding: 0.4rem 1rem;
+      }
+    }
+
+    .categories-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .category-card {
+      border-width: 3px;
+      box-shadow: 5px 5px 0px $neo-border;
+      
+      .card-image-wrapper {
+        height: 150px;
+      }
+    }
+  }
+}

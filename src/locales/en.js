@@ -32,6 +32,7 @@ const en = {
       voiceListen: 'Listening...',
       voiceStart: 'Speak to search',
       voiceNotSupported: 'Browser does not support voice input',
+      unknownAuthor: 'Unknown Author'
     },
     featuredProducts: {
       titlePart1: 'Featured',
@@ -57,14 +58,21 @@ const en = {
       noAccount: 'Don\'t have an account?',
       hasAccount: 'Already have an account?',
       signUpNow: 'Sign up now',
-      signInNow: 'Sign in'
+      signInNow: 'Sign in',
+      loginFailed: 'Login failed. Please check your information.',
+      socialLoginFailed: 'Social login failed.',
+      processing: 'Processing...',
+      or: 'OR',
+      signInGoogle: 'Sign in with Google',
+      registerFailed: 'Registration failed. Please try again.',
+      signUpGoogle: 'Sign up with Google'
     },
     // Header
     header: {
       home: 'Home',
       explore: 'Explore',
       library: 'Library',
-      community: 'Community',
+      categories: 'Categories',
       signIn: 'Sign In!',
       myProfile: 'My Profile',
       myPurchase: 'My Purchase',
@@ -125,7 +133,19 @@ const en = {
       status: 'Status',
       intro: 'Introduction',
       readNow: 'Read Now',
-      save: 'Save'
+      save: 'Save',
+      paymentDev: 'Payment feature is under development!',
+      readFirst: 'Read From Beginning',
+      chooseChapter: 'Choose chapter...',
+      langSelectTitle: 'Select Language',
+      langSelectDesc: 'This book has 2 versions. Which one do you want to read?',
+      langSelectDescChapter: 'This chapter has 2 versions. Which one do you want to read?',
+      langVi: 'Vietnamese',
+      langEn: 'English',
+      noContent: 'This book has no content to read yet.',
+      bilingual: 'Bilingual (EN-VI)',
+      chapter: 'Chapter',
+      unlockVip: 'Unlock ({{price}} coins)'
     },
 
     // PDF Reader
@@ -137,7 +157,8 @@ const en = {
       downloadPdf: 'Try downloading',
       prevPage: 'Previous',
       nextPage: 'Next',
-      page: 'Page'
+      page: 'Page',
+      oops: 'Oops!'
     },
 
     // Maybe You Like
@@ -256,7 +277,13 @@ const en = {
       sortOldest: 'Oldest',
       sortAZ: 'A - Z',
       noResults: 'No books found matching the selected filters.',
-      readNow: 'Read Now'
+      readNow: 'Read Now',
+      voiceNotSupported: 'Browser does not support voice recognition.',
+      voiceError: 'An error occurred while listening.'
+    },
+    backToTop: {
+      title: 'Back to top',
+      label: 'TOP'
     }
   },
 };

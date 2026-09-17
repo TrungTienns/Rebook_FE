@@ -83,6 +83,69 @@ $neo-accent-3: #90FFB4; // Xanh lá
       }
     }
 
+    .dropzone {
+      border: 3px dashed $neo-border;
+      border-radius: 8px;
+      padding: 2rem 1rem;
+      text-align: center;
+      background: #fafafa;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &.active {
+        background: lighten($neo-accent-3, 20%);
+        border-color: $neo-accent-3;
+      }
+
+      .dropzone-text {
+        color: #666;
+        i {
+          font-size: 2rem;
+          color: $neo-border;
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      .image-preview {
+        position: relative;
+        width: 150px;
+        height: 150px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border: 3px solid $neo-border;
+          border-radius: 8px;
+          box-shadow: 4px 4px 0px $neo-border;
+        }
+
+        .remove-img-btn {
+          position: absolute;
+          top: -10px;
+          right: -10px;
+          background: #ff4757;
+          color: white;
+          border: 2px solid $neo-border;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 2px 2px 0px $neo-border;
+          
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+
     .neo-btn {
       display: flex;
       align-items: center;
@@ -142,6 +205,33 @@ $neo-accent-3: #90FFB4; // Xanh lá
       padding: 1rem;
       box-shadow: 3px 3px 0px $neo-border;
       transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .cat-image-wrapper {
+        width: 100%;
+        height: 120px;
+        border: 2px solid $neo-border;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+        background: #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        
+        .no-image {
+          color: #aaa;
+          font-size: 2rem;
+        }
+      }
 
       &:hover {
         transform: translateX(4px);

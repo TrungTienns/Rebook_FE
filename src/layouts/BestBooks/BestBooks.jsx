@@ -91,7 +91,7 @@ export default function BestBooks() {
                 <div className="book-details">
                   <h3 className="book-title" title={book.title}>{book.title}</h3>
                   <p className="book-author">
-                    <i className="fa-solid fa-pen-nib"></i> {book.author?.penName || book.author_id || 'Unknown'}
+                    <i className="fa-solid fa-pen-nib"></i> {book.author?.penName || book.author_id || t('bookDetail.anonymousAuthor', 'Unknown')}
                   </p>
                   
                   <div className="book-meta">

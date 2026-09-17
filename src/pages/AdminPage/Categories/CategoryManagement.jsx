@@ -4,12 +4,27 @@ import './CategoryManagement.scss';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { useDropzone } from 'react-dropzone';
 
 export default function CategoryManagement() {
   const [categories, setCategories] = useState([]);
-  const [formData, setFormData] = useState({ name: '', description: '' });
+  const [formData, setFormData] = useState({ name: '', description: '', image: null });
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const onDrop = (acceptedFiles) => {
+    if (acceptedFiles[0]) {
+      setFormData({ ...formData, image: acceptedFiles[0] });
+      setPreviewImage(URL.createObjectURL(acceptedFiles[0]));
+    }
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { 'image/*': [] },
+    multiple: false
+  });
 
   useEffect(() => {
     fetchCategories();
@@ -34,21 +49,32 @@ export default function CategoryManagement() {
     }
 
     try {
+      const formPayload = new FormData();
+      formPayload.append('name', formData.name);
+      if (formData.description) formPayload.append('description', formData.description);
+      if (formData.image) formPayload.append('image', formData.image);
+
       if (isEditing) {
-        const res = await axiosClient.put(`/categories/${editId}`, formData);
+        const res = await axiosClient.put(`/categories/${editId}`, formPayload, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         if (res?.success) {
           toast.success('Cập nhật thể loại thành công!');
           setIsEditing(false);
           setEditId(null);
-          setFormData({ name: '', description: '' });
+          setFormData({ name: '', description: '', image: null });
+          setPreviewImage(null);
           fetchCategories();
         }
       } else {
-        const res = await axiosClient.post('/categories', formData);
+        const res = await axiosClient.post('/categories', formPayload, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         if (res?.success) {
           toast.success('Tạo thể loại mới thành công!');
-          setFormData({ name: '', description: '' });
-          fetchCategories(); // Reload danh sách
+          setFormData({ name: '', description: '', image: null });
+          setPreviewImage(null);
+          fetchCategories();
         }
       }
     } catch (error) {
@@ -59,7 +85,8 @@ export default function CategoryManagement() {
   const handleEdit = (cat) => {
     setIsEditing(true);
     setEditId(cat.id);
-    setFormData({ name: cat.name, description: cat.description || '' });
+    setFormData({ name: cat.name, description: cat.description || '', image: null });
+    setPreviewImage(cat.imageUrl || null);
     // Scroll to top to see form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -89,7 +116,8 @@ export default function CategoryManagement() {
             if (editId === id) {
               setIsEditing(false);
               setEditId(null);
-              setFormData({ name: '', description: '' });
+              setFormData({ name: '', description: '', image: null });
+              setPreviewImage(null);
             }
           }
         } catch (error) {
@@ -118,13 +146,32 @@ export default function CategoryManagement() {
               <label>Mô tả ngắn</label>
               <textarea rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Giới thiệu về thể loại này..."></textarea>
             </div>
+            <div className="form-group">
+              <label>Ảnh đại diện thể loại</label>
+              <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>
+                <input {...getInputProps()} />
+                {previewImage ? (
+                  <div className="image-preview">
+                    <img src={previewImage} alt="Preview" />
+                    <button type="button" className="remove-img-btn" onClick={(e) => { e.stopPropagation(); setPreviewImage(null); setFormData({...formData, image: null}) }}>
+                      <i className="fa-solid fa-times"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="dropzone-text">
+                    <i className="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Kéo thả ảnh vào đây, hoặc click để chọn ảnh</p>
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="form-actions">
               <button type="submit" className="neo-btn">
                 <i className={`fa-solid ${isEditing ? 'fa-save' : 'fa-plus'}`}></i> 
                 {isEditing ? 'Lưu Thay Đổi' : 'Thêm Mới'}
               </button>
               {isEditing && (
-                <button type="button" className="neo-btn cancel-btn" onClick={() => { setIsEditing(false); setEditId(null); setFormData({ name: '', description: '' }); }}>
+                <button type="button" className="neo-btn cancel-btn" onClick={() => { setIsEditing(false); setEditId(null); setFormData({ name: '', description: '', image: null }); setPreviewImage(null); }}>
                   Hủy
                 </button>
               )}
@@ -141,9 +188,13 @@ export default function CategoryManagement() {
             <div className="category-list">
               {categories.map(cat => (
                 <div key={cat.id} className="category-item">
+                  <div className="cat-image-wrapper">
+                    {cat.imageUrl ? <img src={cat.imageUrl} alt={cat.name} /> : <div className="no-image"><i className="fa-solid fa-image"></i></div>}
+                  </div>
                   <div className="cat-info">
                     <span className="cat-name">{cat.name}</span>
                     <span className="cat-slug">/{cat.slug}</span>
+                    <span className="cat-count">({cat.bookCount || 0} sách)</span>
                   </div>
                   <div className="cat-desc">{cat.description || 'Không có mô tả'}</div>
                   <div className="cat-actions">

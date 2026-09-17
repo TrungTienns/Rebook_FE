@@ -31,6 +31,10 @@ const productService = {
     if (!query?.trim()) return Promise.resolve({ success: true, data: [] });
     return axiosClient.get(`/books/search?q=${encodeURIComponent(query.trim())}`);
   },
+
+  getRelatedBooks: (slug) => {
+    return axiosClient.get(`/books/${slug}/related`);
+  },
 };
 
 export default productService;

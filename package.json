@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.3.1",
     "axios": "^1.20.0",
+    "epubjs": "^0.3.93",
     "firebase": "^12.18.0",
     "flag-icons": "^7.5.0",
     "framer-motion": "^13.2.0",
@@ -24,9 +25,11 @@
     "react-dropzone": "^19.3.0",
     "react-i18next": "^17.0.13",
     "react-pdf": "^10.5.0",
+    "react-reader": "^2.0.15",
     "react-router-dom": "^7.18.3",
     "react-speech-recognition": "^4.0.1",
     "react-toastify": "^11.1.0",
+    "recharts": "^3.10.1",
     "regenerator-runtime": "^0.14.1",
     "sass": "^1.103.1",
     "sweetalert2": "^11.26.25"

@@ -32,6 +32,7 @@ const vi = {
       voiceListen: 'Đang nghe...',
       voiceStart: 'Nói để tìm kiếm',
       voiceNotSupported: 'Trình duyệt không hỗ trợ giọng nói',
+      unknownAuthor: 'Tác giả ẩn danh'
     },
     featuredProducts: {
       titlePart1: 'Sách Mới',
@@ -57,14 +58,21 @@ const vi = {
       noAccount: 'Bạn chưa có tài khoản?',
       hasAccount: 'Đã có tài khoản?',
       signUpNow: 'Đăng ký ngay',
-      signInNow: 'Đăng nhập'
+      signInNow: 'Đăng nhập',
+      loginFailed: 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.',
+      socialLoginFailed: 'Đăng nhập bằng mạng xã hội thất bại.',
+      processing: 'Đang xử lý...',
+      or: 'HOẶC',
+      signInGoogle: 'Đăng nhập bằng Google',
+      registerFailed: 'Đăng ký thất bại. Vui lòng thử lại.',
+      signUpGoogle: 'Đăng ký bằng Google'
     },
     // Header
     header: {
       home: 'Trang Chủ',
       explore: 'Khám Phá',
       library: 'Thư Viện',
-      community: 'Cộng Đồng',
+      categories: 'Thể Loại',
       signIn: 'Đăng Nhập!',
       myProfile: 'Hồ Sơ Của Tôi',
       myPurchase: 'Đơn Hàng Của Tôi',
@@ -125,7 +133,19 @@ const vi = {
       status: 'Tình trạng',
       intro: 'Giới Thiệu',
       readNow: 'Đọc Ngay',
-      save: 'Lưu Lại'
+      save: 'Lưu Lại',
+      paymentDev: 'Tính năng thanh toán đang được phát triển!',
+      readFirst: 'Đọc Từ Đầu',
+      chooseChapter: 'Chọn chương...',
+      langSelectTitle: 'Chọn Ngôn Ngữ',
+      langSelectDesc: 'Cuốn sách này có 2 phiên bản. Bạn muốn đọc bản nào?',
+      langSelectDescChapter: 'Chương này có 2 phiên bản. Bạn muốn đọc bản nào?',
+      langVi: 'Tiếng Việt',
+      langEn: 'Tiếng Anh',
+      noContent: 'Sách này chưa có nội dung để đọc.',
+      bilingual: 'Song ngữ (EN-VI)',
+      chapter: 'Chương',
+      unlockVip: 'Mở khóa ({{price}} xu)'
     },
 
     // PDF Reader
@@ -137,7 +157,8 @@ const vi = {
       downloadPdf: 'Thử tải xuống',
       prevPage: 'Trang trước',
       nextPage: 'Trang sau',
-      page: 'Trang'
+      page: 'Trang',
+      oops: 'Rất tiếc!'
     },
 
     // Maybe You Like
@@ -257,7 +278,13 @@ const vi = {
       sortOldest: 'Cũ nhất',
       sortAZ: 'A - Z',
       noResults: 'Không tìm thấy cuốn sách nào phù hợp với bộ lọc.',
-      readNow: 'Đọc Ngay'
+      readNow: 'Đọc Ngay',
+      voiceNotSupported: 'Trình duyệt của bạn không hỗ trợ nhận dạng giọng nói.',
+      voiceError: 'Có lỗi xảy ra khi nghe.'
+    },
+    backToTop: {
+      title: 'Lên đầu trang',
+      label: 'TOP'
     }
   },
 };

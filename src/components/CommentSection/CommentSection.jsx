@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import userService from '../../services/userService';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { path } from '../../common/path';
 import './CommentSection.scss';
 
 export default function CommentSection({ bookId }) {
@@ -21,7 +23,10 @@ export default function CommentSection({ bookId }) {
   const fetchComments = async () => {
     try {
       const res = await userService.getCommentsByBook(bookId);
-      if (res?.success) setComments(res.data);
+      if (res?.success) {
+        setComments(res.data);
+        localStorage.setItem(`viewed_comments_${bookId}`, res.data.length.toString());
+      }
     } catch (err) { console.error(err); }
   };
 
@@ -151,7 +156,7 @@ export default function CommentSection({ bookId }) {
       ) : (
         <p className="login-prompt">
           <i className="fa-solid fa-lock" />{' '}
-          <a href="/signin">{t('commentSection.login')}</a>{' '}
+          <Link to={path.SIGN_IN}>{t('commentSection.login')}</Link>{' '}
           {t('commentSection.loginPrompt')}
         </p>
       )}

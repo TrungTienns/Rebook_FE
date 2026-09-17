@@ -174,7 +174,7 @@ export default function SearchModal({ isOpen, onClose }) {
                       <div className="result-info">
                         <h4 className="result-title" title={book.title}>{book.title}</h4>
                         <p className="result-author">
-                          <i className="fa-solid fa-pen-nib" /> {book.author?.penName || 'Unknown'}
+                          <i className="fa-solid fa-pen-nib" /> {book.author?.penName || t('search.unknownAuthor', 'Unknown')}
                         </p>
                         <div className="result-meta">
                           <span className="rating">

@@ -16,28 +16,16 @@ export default function MaybeYouLike({ currentBook }) {
     const fetchRelatedBooks = async () => {
       try {
         setLoading(true);
-        const response = await productService.getAll();
+        const response = await productService.getRelatedBooks(currentBook.slug);
 
-        let allBooks = [];
+        let related = [];
         if (response && response.success && Array.isArray(response.data)) {
-          allBooks = response.data;
+          related = response.data;
         } else if (Array.isArray(response)) {
-          allBooks = response;
+          related = response;
         }
 
-        const currentCategoryIds = currentBook.categories?.map(c => c.id) || [];
-
-        let related = allBooks.filter(b => b.id !== currentBook.id);
-
-        if (currentCategoryIds.length > 0) {
-          related = related.filter(b => {
-            const bCategoryIds = b.categories?.map(c => c.id) || [];
-            return bCategoryIds.some(id => currentCategoryIds.includes(id));
-          });
-        }
-
-        // Tăng số lượng hiển thị vì mỗi item giờ nhỏ gọn hơn
-        setBooks(related.slice(0, 10));
+        setBooks(related);
 
       } catch (err) {
         console.error('Error fetching related books:', err);

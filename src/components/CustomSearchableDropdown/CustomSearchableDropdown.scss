@@ -1,0 +1,119 @@
+@import '../../styles/variables';
+
+.custom-searchable-dropdown {
+  position: relative;
+  width: 100%;
+  
+  .dropdown-selected {
+    padding: 0.8rem 1rem;
+    border: $border-width solid $border-dark;
+    border-radius: 8px;
+    background-color: $bg-white;
+    font-weight: 700;
+    color: $text-dark;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 3px 3px 0px $border-dark;
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: 4px 4px 0px $btn-primary;
+      border-color: $btn-primary;
+      transform: translateY(-2px);
+    }
+
+    span {
+      flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toggle-icon {
+      transition: transform 0.3s ease;
+      &.open { transform: rotate(180deg); }
+    }
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    width: 100%;
+    background-color: $bg-white;
+    border: $border-width solid $border-dark;
+    border-radius: 8px;
+    box-shadow: 4px 4px 0px $border-dark;
+    z-index: 20;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+
+    .search-input-wrapper {
+      position: relative;
+      padding: 0.5rem;
+      border-bottom: 2px solid rgba($border-dark, 0.1);
+      background-color: #f8f9fa;
+
+      i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba($text-dark, 0.5);
+      }
+
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.6rem 0.6rem 0.6rem 2rem;
+        border: 2px solid $border-dark;
+        border-radius: 6px;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 600;
+        outline: none;
+
+        &:focus {
+          border-color: $btn-primary;
+        }
+      }
+    }
+
+    .options-list {
+      overflow-y: auto;
+      max-height: 200px;
+    }
+
+    .dropdown-item {
+      padding: 0.8rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border-bottom: 2px solid rgba($border-dark, 0.1);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background-color: #f1f2f6;
+      }
+
+      &.active {
+        background-color: $bg-primary;
+        color: $text-dark;
+        font-weight: 800;
+      }
+
+      &.no-results {
+        color: #999;
+        text-align: center;
+        cursor: default;
+        &:hover { background-color: transparent; }
+      }
+    }
+  }
+}

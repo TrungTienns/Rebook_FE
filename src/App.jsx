@@ -22,7 +22,10 @@ const UserManagement     = lazy(() => import('./pages/AdminPage/Users/User'));
 const CommentManagement  = lazy(() => import('./pages/AdminPage/Comments/CommentManagement'));
 const RatingManagement   = lazy(() => import('./pages/AdminPage/Ratings/RatingManagement'));
 const ChapterManagement  = lazy(() => import('./pages/AdminPage/Chapters/ChapterManagement'));
+const NotificationManagement = lazy(() => import('./pages/AdminPage/Notifications/NotificationManagement'));
+const Statistics         = lazy(() => import('./pages/AdminPage/Statistics/Statistics'));
 const LibraryPage        = lazy(() => import('./pages/LibraryPage/LibraryPage'));
+const CategoriesPage     = lazy(() => import('./pages/CategoriesPage/CategoriesPage'));
 
 // ── Page loading fallback ────────────────────────────────────────────────────
 function PageLoader() {
@@ -124,6 +127,7 @@ function App() {
           <Route path={path.BOOK_DETAIL} element={<BookDetailPage />} />
           <Route path={path.BOOK_READ}   element={<PdfReaderPage />} />
           <Route path={path.MY_LIBRARY}  element={<LibraryPage />} />
+          <Route path="/categories"      element={<CategoriesPage />} />
 
           {/* Admin Routes */}
           <Route path={path.ADMIN} element={
@@ -137,6 +141,8 @@ function App() {
             <Route path="categories" element={<CategoryManagement />} />
             <Route path="comments"   element={<CommentManagement />} />
             <Route path="ratings"    element={<RatingManagement />} />
+            <Route path="notifications" element={<NotificationManagement />} />
+            <Route path="statistics" element={<Statistics />} />
           </Route>
         </Routes>
       </Suspense>

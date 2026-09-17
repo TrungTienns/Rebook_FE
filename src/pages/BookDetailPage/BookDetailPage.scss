@@ -93,6 +93,29 @@
         align-items: center;
         gap: 0.4rem;
       }
+
+      .lang-badges-wrapper {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+
+        .lang-badge {
+          color: white;
+          padding: 0.3rem 0.6rem;
+          border-radius: 20px;
+          font-weight: 800;
+          font-size: 0.75rem;
+          border: 2px solid #1a1a1a;
+          box-shadow: 2px 2px 0px rgba(26, 26, 26, 0.5);
+
+          &.bilingual { background: #3498db; }
+          &.vi { background: #ff5252; }
+          &.en { background: #9b59b6; }
+        }
+      }
     }
   }
 
@@ -174,6 +197,8 @@
       display: flex;
       gap: 1rem;
       margin-top: auto;
+      flex-wrap: wrap;
+      align-items: center;
 
       .neo-btn {
         flex: 1;
@@ -205,12 +230,132 @@
           color: white;
         }
 
+        &.btn-vip {
+          background: #ffc107;
+          color: #1a1a1a;
+        }
+
         &.secondary-action {
           background: #e0e0e0;
           color: $text-dark;
         }
       }
+
+      .chapter-dropdown-wrapper {
+        position: relative;
+        width: 250px;
+        outline: none;
+
+        .chapter-dropdown-btn {
+          width: 100%;
+          padding: 0.8rem 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #f8f9fa;
+          color: #1a1a1a;
+          font-weight: 800;
+          font-size: 1rem;
+          border: 3px solid #1a1a1a;
+          border-radius: 12px;
+          box-shadow: 4px 4px 0px #1a1a1a;
+          cursor: pointer;
+          transition: all 0.2s;
+          gap: 0.5rem;
+
+          &:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #1a1a1a;
+          }
+          
+          .btn-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          i { flex-shrink: 0; }
+        }
+
+        .chapter-dropdown-menu {
+          position: absolute;
+          top: 110%;
+          left: 0;
+          width: 100%;
+          max-height: 250px;
+          overflow-y: auto;
+          background: white;
+          border: 3px solid #1a1a1a;
+          border-radius: 12px;
+          box-shadow: 6px 6px 0px rgba(26, 26, 26, 0.2);
+          z-index: 100;
+          display: flex;
+          flex-direction: column;
+          padding: 0.5rem;
+          gap: 0.3rem;
+
+          .chapter-item-btn {
+            padding: 0.8rem;
+            text-align: left;
+            background: transparent;
+            border: none;
+            border-bottom: 2px dashed #eee;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            border-radius: 6px;
+            transition: background 0.2s;
+
+            &:hover {
+              background: #f0f0f0;
+            }
+
+            .chapter-item-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+
+              .chapter-number {
+                font-weight: 800;
+                font-size: 0.95rem;
+                color: #1a1a1a;
+              }
+              
+              .chapter-lang-tags {
+                display: flex;
+                gap: 0.2rem;
+
+                .tag {
+                  padding: 0.15rem 0.3rem;
+                  color: white;
+                  border-radius: 4px;
+                  font-size: 0.65rem;
+                  font-weight: bold;
+                  &.vi { background: #ff5252; }
+                  &.en { background: #3498db; }
+                }
+              }
+            }
+
+            .chapter-title {
+              font-size: 0.8rem;
+              color: #666;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+      }
     }
+  }
+
+  .book-detail-bottom-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
   }
 }
 

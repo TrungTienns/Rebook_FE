@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import './BackToTop.scss';
 
 export default function BackToTop() {
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    let timeoutId = null;
     const handleScroll = () => {
-      setVisible(window.scrollY > 300);
+      if (timeoutId) return;
+      timeoutId = setTimeout(() => {
+        setVisible(window.scrollY > 300);
+        timeoutId = null;
+      }, 100); // 100ms throttle
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -29,10 +39,10 @@ export default function BackToTop() {
           transition={{ type: 'spring', bounce: 0.5, duration: 0.4 }}
           whileHover={{ scale: 1.1, y: -4 }}
           whileTap={{ scale: 0.9, y: 4 }}
-          title="Back to top"
+          title={t('backToTop.title', 'Lên đầu trang')}
         >
           <span className="btt-arrow">↑</span>
-          <span className="btt-label">TOP</span>
+          <span className="btt-label">{t('backToTop.label', 'TOP')}</span>
         </motion.button>
       )}
     </AnimatePresence>

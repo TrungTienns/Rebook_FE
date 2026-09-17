@@ -8,6 +8,7 @@ import 'flag-icons/css/flag-icons.min.css';
 import './Header.scss';
 import Logo from '../../components/Logo/Logo';
 import SearchModal from '../../components/SearchModal/SearchModal';
+import notificationService from '../../services/notificationService';
 
 export default function Header() {
   const { t, i18n } = useTranslation();
@@ -16,12 +17,20 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const notifRef = useRef(null);
   const location = useLocation();
+
+  const [notifications, setNotifications] = useState([]);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setIsNotifOpen(false);
       }
     };
 
@@ -29,9 +38,74 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      fetchNotifications();
+      // Poll notifications every 30 seconds to show red dot in near real-time
+      const interval = setInterval(() => {
+        fetchNotifications();
+      }, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await notificationService.getMyNotifications();
+      if (res?.success) setNotifications(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleMarkAsRead = async (id) => {
+    try {
+      await notificationService.markAsRead(id);
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleMarkAllRead = async () => {
+    try {
+      await notificationService.markAllAsRead();
+      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteNotif = async (e, id) => {
+    e.stopPropagation();
+    try {
+      const res = await notificationService.deleteNotification(id);
+      if (res?.success) {
+        setNotifications(prev => prev.filter(n => n.id !== id));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const toggleLanguage = () => {
     const next = i18n.language === 'vi' ? 'en' : 'vi';
     i18n.changeLanguage(next);
+  };
+
+  const timeAgo = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const seconds = Math.round((new Date() - date) / 1000);
+    const minutes = Math.round(seconds / 60);
+    const hours = Math.round(minutes / 60);
+    const days = Math.round(hours / 24);
+
+    if (seconds < 60) return 'Vài giây trước';
+    if (minutes < 60) return `${minutes} phút trước`;
+    if (hours < 24) return `${hours} giờ trước`;
+    if (days < 7) return `${days} ngày trước`;
+    return date.toLocaleDateString('vi-VN');
   };
 
   return (
@@ -51,7 +125,7 @@ export default function Header() {
           <Link to={path.HOME} className={`nav-link ${location.pathname === path.HOME ? 'active' : ''}`}>{t('header.home')}</Link>
           <Link to={path.EXPLORE} className={`nav-link ${location.pathname.startsWith(path.EXPLORE) ? 'active' : ''}`}>{t('header.explore')}</Link>
           <Link to={path.MY_LIBRARY} className={`nav-link ${location.pathname.startsWith(path.MY_LIBRARY) ? 'active' : ''}`}>{t('header.library')}</Link>
-          <a href="#community" className="nav-link">{t('header.community')}</a>
+          <Link to="/categories" className={`nav-link ${location.pathname.startsWith('/categories') ? 'active' : ''}`}>{t('header.categories')}</Link>
         </nav>
 
         <div className="header-actions">
@@ -81,8 +155,64 @@ export default function Header() {
             <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
           </div>
           
+          
           {user ? (
-            <div className="user-profile-container" ref={dropdownRef}>
+            <div className="user-section">
+              {/* Notifications */}
+              <div className="notif-wrapper" ref={notifRef}>
+                <button className={`btn-notif ${unreadCount > 0 ? 'has-unread' : ''}`} onClick={() => setIsNotifOpen(!isNotifOpen)}>
+                  <i className="fa-solid fa-bell"></i>
+                  {unreadCount > 0 && <span className="notif-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>}
+                </button>
+
+                {isNotifOpen && (
+                  <div className="notif-dropdown neo-box">
+                    <div className="notif-header">
+                      <h3>Thông báo</h3>
+                      {unreadCount > 0 && (
+                        <button className="mark-read-btn" onClick={handleMarkAllRead}>Đánh dấu đã đọc</button>
+                      )}
+                    </div>
+                    <div className="notif-list">
+                      {notifications.length === 0 ? (
+                        <div className="notif-empty">Chưa có thông báo nào.</div>
+                      ) : (
+                        notifications.map(notif => (
+                          <div 
+                            key={notif.id} 
+                            className={`notif-item ${!notif.isRead ? 'unread' : ''}`}
+                            onClick={() => {
+                              if (!notif.isRead) handleMarkAsRead(notif.id);
+                            }}
+                          >
+                            <div className="notif-icon">
+                              {notif.type === 'system' && <i className="fa-solid fa-circle-info text-blue"></i>}
+                              {notif.type === 'promotion' && <i className="fa-solid fa-tag text-yellow"></i>}
+                              {notif.type === 'new_book' && <i className="fa-solid fa-book-open text-green"></i>}
+                            </div>
+                            <div className="notif-content">
+                              <h4>{notif.title}</h4>
+                              <p>{notif.message}</p>
+                              {notif.link && (
+                                <Link to={notif.link} className="notif-link">Xem chi tiết</Link>
+                              )}
+                              <div className="notif-meta">
+                                <span className="notif-time">{timeAgo(notif.created_at)}</span>
+                                <button className="delete-notif-btn" onClick={(e) => handleDeleteNotif(e, notif.id)} title="Xóa thông báo">
+                                  <i className="fa-solid fa-trash-can"></i>
+                                </button>
+                              </div>
+                            </div>
+                            {!notif.isRead && <div className="unread-dot"></div>}
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="user-profile-container" ref={dropdownRef}>
               <div 
                 className={`user-profile-pill ${isDropdownOpen ? 'active' : ''}`}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -142,6 +272,7 @@ export default function Header() {
                 </div>
               )}
             </div>
+          </div>
           ) : (
             <Link to={path.SIGN_IN} className="btn-primary" style={{textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
               {t('header.signIn')}

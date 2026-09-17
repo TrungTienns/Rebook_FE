@@ -11,6 +11,13 @@ export const path = {
   //ADMIN PAGE
   ADMIN: '/admin',
   ADMIN_DASHBOARD: '/admin/dashboard',
-  ADMIN_USER: '/admin/user',
-  ADMIN_CHAPTERS: '/admin/chapters'
+  ADMIN_USERS: '/admin/users',
+  ADMIN_BOOKS: '/admin/books',
+  ADMIN_CHAPTERS: '/admin/chapters',
+  ADMIN_CATEGORIES: '/admin/categories',
+  ADMIN_COMMENTS: '/admin/comments',
+  ADMIN_RATINGS: '/admin/ratings',
+  ADMIN_ANNOUNCEMENTS: '/admin/announcements',
+  ADMIN_NOTIFICATIONS: '/admin/notifications',
+  ADMIN_STATISTICS: '/admin/statistics'
 };

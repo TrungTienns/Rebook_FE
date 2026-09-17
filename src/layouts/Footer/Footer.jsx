@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { path } from '../../common/path';
 import './Footer.scss';
 import Logo from '../../components/Logo/Logo';
 
@@ -34,10 +36,10 @@ export default function Footer() {
         <div className="footer-col">
           <h4 className="footer-title">{t('footer.explore')}</h4>
           <ul className="footer-links">
-            <li><a href="#">{t('footer.allBooks')}</a></li>
-            <li><a href="#">{t('footer.trending')}</a></li>
-            <li><a href="#">{t('footer.newRelease')}</a></li>
-            <li><a href="#">{t('footer.categories')}</a></li>
+            <li><Link to={path.HOME}>{t('footer.allBooks')}</Link></li>
+            <li><Link to={path.HOME}>{t('footer.trending')}</Link></li>
+            <li><Link to={path.HOME}>{t('footer.newRelease')}</Link></li>
+            <li><Link to={path.HOME}>{t('footer.categories')}</Link></li>
           </ul>
         </div>
 
@@ -45,10 +47,10 @@ export default function Footer() {
         <div className="footer-col">
           <h4 className="footer-title">{t('footer.support')}</h4>
           <ul className="footer-links">
-            <li><a href="#">{t('footer.faq')}</a></li>
-            <li><a href="#">{t('footer.contact')}</a></li>
-            <li><a href="#">{t('footer.privacy')}</a></li>
-            <li><a href="#">{t('footer.terms')}</a></li>
+            <li><Link to={path.HOME}>{t('footer.faq')}</Link></li>
+            <li><Link to={path.HOME}>{t('footer.contact')}</Link></li>
+            <li><Link to={path.HOME}>{t('footer.privacy')}</Link></li>
+            <li><Link to={path.HOME}>{t('footer.terms')}</Link></li>
           </ul>
         </div>
 

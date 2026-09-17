@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axiosClient from '../../../services/axiosClient';
 import './UploadBook.scss';
 import { motion } from 'framer-motion';
@@ -6,14 +6,27 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useDropzone } from 'react-dropzone';
 
+const INITIAL_BOOK_STATE = { 
+  title: '', 
+  titleEn: '', 
+  authorName: '', 
+  categoryId: '', 
+  description: '', 
+  coverImage: null, 
+  isVip: 'false', 
+  vipPrice: 0, 
+  status: 'ongoing' 
+};
+
 export default function UploadBook() {
   const [activeTab, setActiveTab] = useState('create'); // 'create' hoặc 'manage'
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   
-  const [bookData, setBookData] = useState({ title: '', titleEn: '', authorName: '', categoryId: '', description: '', coverImage: null, isVip: 'false', vipPrice: 0 });
+  const [bookData, setBookData] = useState(INITIAL_BOOK_STATE);
   const [isEditingBook, setIsEditingBook] = useState(false);
   const [editBookId, setEditBookId] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   
   // Filters for book list
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,7 +39,11 @@ export default function UploadBook() {
   // Dropzone cho ảnh bìa
   const onDropCover = (acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
       setBookData({...bookData, coverImage: acceptedFiles[0]});
+      setPreviewUrl(URL.createObjectURL(acceptedFiles[0]));
       setErrors({...errors, coverImage: false});
     }
   };
@@ -40,13 +57,20 @@ export default function UploadBook() {
 
 
 
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
   const fetchBooks = async () => {
     try {
       const params = {};
       if (searchQuery) params.q = searchQuery;
       if (sortFilter !== 'newest') params.sort = sortFilter;
       
-      // If user selected a specific category ID, we need its slug because backend uses category=slug
       if (categoryFilter !== 'all') {
         const cat = categories.find(c => c.id.toString() === categoryFilter.toString());
         if (cat) params.category = cat.slug;
@@ -59,21 +83,19 @@ export default function UploadBook() {
     }
   };
 
-  const fetchCategories = async () => {
-    try {
-      const res = await axiosClient.get('/categories');
-      if (res?.success) setCategories(res.data);
-    } catch {
-      console.error('Lỗi khi tải thể loại');
-    }
-  };
-
   useEffect(() => {
     fetchBooks();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, sortFilter, categoryFilter, categories]);
 
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axiosClient.get('/categories');
+        if (res?.success) setCategories(res.data);
+      } catch {
+        console.error('Lỗi khi tải thể loại');
+      }
+    };
     fetchCategories();
   }, []);
 
@@ -102,7 +124,10 @@ export default function UploadBook() {
     formData.append('description', bookData.description);
     formData.append('isVip', bookData.isVip);
     formData.append('vipPrice', bookData.vipPrice);
-    if (bookData.coverImage) formData.append('coverImage', bookData.coverImage);
+    formData.append('status', bookData.status);
+    if (bookData.coverImage) {
+      formData.append('coverImage', bookData.coverImage);
+    }
 
     // Bật Loading Swal
     Swal.fire({
@@ -127,7 +152,9 @@ export default function UploadBook() {
           toast.success(' Cập nhật sách thành công!');
           setIsEditingBook(false);
           setEditBookId(null);
-          setBookData({ title: '', titleEn: '', authorName: '', categoryId: '', description: '', coverImage: null, isVip: 'false', vipPrice: 0 });
+          setBookData(INITIAL_BOOK_STATE);
+          if (previewUrl) URL.revokeObjectURL(previewUrl);
+          setPreviewUrl(null);
           setErrors({});
           fetchBooks();
         }
@@ -138,12 +165,14 @@ export default function UploadBook() {
         if (res?.success) { 
           Swal.close();
           toast.success('🎉 Đăng sách thành công!');
-          setBookData({ title: '', titleEn: '', authorName: '', categoryId: '', description: '', coverImage: null, isVip: 'false', vipPrice: 0 });
+          setBookData(INITIAL_BOOK_STATE);
+          if (previewUrl) URL.revokeObjectURL(previewUrl);
+          setPreviewUrl(null);
           setErrors({});
           fetchBooks();
         }
       }
-    } catch (error) {
+    } catch {
       Swal.close();
       toast.error(' Lỗi khi lưu sách');
     }
@@ -153,15 +182,18 @@ export default function UploadBook() {
     setIsEditingBook(true);
     setEditBookId(book.id);
     setBookData({
+      ...INITIAL_BOOK_STATE,
       title: book.title || '',
       titleEn: book.titleEn || '',
       authorName: book.author?.penName || '',
       categoryId: book.categories?.[0]?.id || '',
       description: book.description || '',
-      coverImage: null,
       isVip: book.isVip ? 'true' : 'false',
-      vipPrice: book.vipPrice || 0
+      vipPrice: book.vipPrice || 0,
+      status: book.status || 'ongoing'
     });
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(null);
     setErrors({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -187,11 +219,11 @@ export default function UploadBook() {
           if (res?.success) {
             toast.success('Đã xóa sách thành công!');
             fetchBooks();
-            if (editBookId === id) {
-              setIsEditingBook(false);
-              setEditBookId(null);
-              setBookData({ title: '', authorId: '', categoryId: '', description: '', coverImage: null });
-            }
+            setIsEditingBook(false);
+            setEditBookId(null);
+            setBookData(INITIAL_BOOK_STATE);
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
+            setPreviewUrl(null);
           }
         } catch {
           toast.error('Lỗi khi xóa sách');
@@ -277,6 +309,16 @@ export default function UploadBook() {
                   placeholder={bookData.isVip === 'true' ? "Nhập giá VIP..." : "0"} 
                 />
               </div>
+              <div className="col">
+                <label>Trạng Thái Truyện</label>
+                <select 
+                  value={bookData.status} 
+                  onChange={e => setBookData({...bookData, status: e.target.value})}
+                >
+                  <option value="ongoing">Đang Ra (Ongoing)</option>
+                  <option value="completed">Đã Hoàn Thành (Completed)</option>
+                </select>
+              </div>
             </div>
             <div className="form-group">
               <label>Mô tả (Giới thiệu)</label>
@@ -289,9 +331,9 @@ export default function UploadBook() {
                 className={`neo-dropzone ${isCoverDragActive ? 'active' : ''} ${errors.coverImage ? 'error-input' : ''}`}
               >
                 <input {...getCoverInputProps()} />
-                {bookData.coverImage ? (
+                {bookData.coverImage && previewUrl ? (
                   <div className="dropzone-preview">
-                    <img src={URL.createObjectURL(bookData.coverImage)} alt="Preview" />
+                    <img src={previewUrl} alt="Preview" />
                     <p>{bookData.coverImage.name}</p>
                   </div>
                 ) : (
@@ -308,7 +350,7 @@ export default function UploadBook() {
                 <i className={`fa-solid ${isEditingBook ? 'fa-save' : 'fa-rocket'}`}></i> {isEditingBook ? 'Lưu Sách' : 'Tạo Sách Ngay'}
               </button>
               {isEditingBook && (
-                <button type="button" className="neo-btn cancel-btn" style={{ flex: 1, background: '#9e9e9e', color: 'white' }} onClick={() => { setIsEditingBook(false); setEditBookId(null); setBookData({ title: '', authorName: '', categoryId: '', description: '', coverImage: null }); setErrors({}); }}>
+                <button type="button" className="neo-btn cancel-btn" style={{ flex: 1, background: '#9e9e9e', color: 'white' }} onClick={() => { setIsEditingBook(false); setEditBookId(null); setBookData(INITIAL_BOOK_STATE); if (previewUrl) URL.revokeObjectURL(previewUrl); setPreviewUrl(null); setErrors({}); }}>
                   Hủy
                 </button>
               )}
@@ -369,17 +411,29 @@ export default function UploadBook() {
                   </tr>
                 </thead>
                 <tbody>
-                  {books.filter(b => b.title.toLowerCase().includes(searchQuery.toLowerCase()) || b.id.toString().includes(searchQuery)).map(book => (
+                  {books.map(book => (
                     <tr key={book.id}>
                       <td>#{book.id}</td>
                       <td className="book-name-cell">
-                        {book.coverImageUrl || book.cover_image_url ? (
-                          <img src={book.coverImageUrl || book.cover_image_url} alt={book.title} className="tiny-cover"/>
-                        ) : (
-                          <div className="tiny-cover" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#e0e0e0'}}>
-                            <i className="fa-solid fa-image" style={{color: '#999'}}></i>
-                          </div>
-                        )}
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                          {book.coverImageUrl || book.cover_image_url ? (
+                            <img src={book.coverImageUrl || book.cover_image_url} alt={book.title} className="tiny-cover"/>
+                          ) : (
+                            <div className="tiny-cover" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#e0e0e0'}}>
+                              <i className="fa-solid fa-image" style={{color: '#999'}}></i>
+                            </div>
+                          )}
+                          {book.isVip && (
+                            <div className="vip-badge" style={{ position: 'absolute', top: 5, right: 5, background: '#ffc107', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 'bold' }}>
+                              <i className="fa-solid fa-crown"></i> VIP
+                            </div>
+                          )}
+                          {book.status === 'completed' && (
+                            <div className="status-badge" style={{ position: 'absolute', top: 5, left: 5, background: '#2ed573', color: 'white', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 'bold' }}>
+                              <i className="fa-solid fa-check-circle"></i> Hoàn Thành
+                            </div>
+                          )}
+                        </div>
                         <span>{book.title}</span>
                       </td>
                       <td>{book.author?.penName || 'Không rõ'}</td>
