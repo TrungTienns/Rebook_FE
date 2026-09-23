@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import {  useState, useEffect  } from 'react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { motion } from 'framer-motion';
@@ -19,10 +19,6 @@ export default function NotificationManagement() {
     link: ''
   });
 
-  useEffect(() => {
-    fetchNotifications();
-  }, []);
-
   const fetchNotifications = async () => {
     try {
       setLoading(true);
@@ -37,6 +33,11 @@ export default function NotificationManagement() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchNotifications();
+  }, []);
 
   const handleSendNotification = async (e) => {
     e.preventDefault();

@@ -1,6 +1,4 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { path } from '../../common/path';
 import './Footer.scss';

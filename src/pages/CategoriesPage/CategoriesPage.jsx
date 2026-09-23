@@ -14,11 +14,6 @@ export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    fetchCategories();
-  }, []);
-
   const fetchCategories = async () => {
     try {
       setLoading(true);
@@ -32,6 +27,12 @@ export default function CategoriesPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchCategories();
+  }, []);
 
   const handleCategoryClick = (slug) => {
     navigate(`${path.MY_LIBRARY}?category=${slug}`);

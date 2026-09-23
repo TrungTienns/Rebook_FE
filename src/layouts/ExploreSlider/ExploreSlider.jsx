@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import {  useState, useEffect  } from 'react';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import './ExploreSlider.scss';
 
-import slide1Img from '../../assets/images/banner_book_forest.jpg';
-import slide2Img from '../../assets/images/banner_reading_clouds.jpg';
-import slide3Img from '../../assets/images/banner_cozy_library.jpg';
+import slide1Img from '../../assets/Images/banner_book_forest.jpg';
+import slide2Img from '../../assets/Images/banner_reading_clouds.jpg';
+import slide3Img from '../../assets/Images/banner_cozy_library.jpg';
 
 export default function ExploreSlider() {
-  const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const slides = [

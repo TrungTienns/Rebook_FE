@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import {  useState, useEffect  } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import productService from '../../services/productService';
@@ -36,7 +36,7 @@ export default function MaybeYouLike({ currentBook }) {
     };
 
     fetchRelatedBooks();
-  }, [currentBook]);
+  }, [currentBook, t]);
 
   if (!currentBook) {
     return null;
@@ -73,25 +73,31 @@ export default function MaybeYouLike({ currentBook }) {
         {!loading && !error && books.length > 0 && (
           <div className="books-list">
             {books.map((book) => (
-              <Link to={`/book/${book.slug}`} className="book-item" key={book.id}>
-                <div className="book-cover">
-                  {book.coverImageUrl || book.cover_image_url ? (
-                    <img src={book.coverImageUrl || book.cover_image_url} alt={book.title} />
-                  ) : (
-                    <div className="no-cover">
-                      <i className="fa-solid fa-image fa-2x"></i>
-                    </div>
-                  )}
-
-                  <div className="hover-overlay">
-                    <span className="read-tag">
-                      <i className="fa-solid fa-book-open"></i> {t('maybeYouLike.readNow')}
-                    </span>
+              <div className="author-book-card neo-box" key={book.id || book._id}>
+                <Link to={`/book/${book.slug}`} className="author-book-link">
+                  <div className="author-book-cover">
+                    {book.coverImageUrl || book.cover_image_url ? (
+                      <img src={book.coverImageUrl || book.cover_image_url} alt={book.title} />
+                    ) : (
+                      <div className="no-cover">
+                        <i className="fa-solid fa-book fa-2x"></i>
+                      </div>
+                    )}
+                    {book.isVip && <span className="vip-badge"><i className="fa-solid fa-crown" /> VIP</span>}
                   </div>
-                </div>
-
-                <h3 className="book-title" title={book.title}>{book.title}</h3>
-              </Link>
+                  
+                  <div className="author-book-info">
+                    <h3 className="author-book-title" title={book.title}>{book.title}</h3>
+                    {book.categories?.length > 0 && (
+                      <p className="author-book-cats">{book.categories.map((c) => c.name).join(' · ')}</p>
+                    )}
+                    <div className="author-book-stats">
+                      <span><i className="fa-solid fa-eye"></i> {book.totalViews || 0}</span>
+                      <span><i className="fa-solid fa-star"></i> {book.avgRating || '0.0'}</span>
+                    </div>
+                  </div>
+                </Link>
+              </div>
             ))}
           </div>
         )}

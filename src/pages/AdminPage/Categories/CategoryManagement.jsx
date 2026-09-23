@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import {  useState, useEffect  } from 'react';
 import axiosClient from '../../../services/axiosClient';
 import './CategoryManagement.scss';
 import { motion } from 'framer-motion';
@@ -26,18 +26,19 @@ export default function CategoryManagement() {
     multiple: false
   });
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
   const fetchCategories = async () => {
     try {
       const res = await axiosClient.get('/categories');
       if (res?.success) setCategories(res.data);
-    } catch (error) {
-      console.error('Lỗi khi tải danh mục:', error);
+    } catch {
+      console.error('Lỗi khi tải danh mục:');
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -120,8 +121,8 @@ export default function CategoryManagement() {
               setPreviewImage(null);
             }
           }
-        } catch (error) {
-          toast.error('Lỗi khi xóa thể loại');
+        } catch {
+          toast.error('Lỗi khi xóa danh mục');
         }
       }
     });

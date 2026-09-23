@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import {  useState, useEffect  } from 'react';
 import { useTranslation } from 'react-i18next';
 import productService from '../../services/productService';
 import { isNewProduct } from '../../utils/dateUtils';
@@ -34,7 +34,7 @@ export default function FeaturedProducts() {
     };
 
     fetchProducts();
-  }, []);  // Không thêm `t` — không cần refetch khi đổi ngôn ngữ
+  }, [t]);
 
   return (
     <section className="featured-products">

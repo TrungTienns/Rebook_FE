@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import {  useState, useEffect, useCallback  } from 'react';
 import commentService from '../../../services/commentService';
 import productService from '../../../services/productService';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import './CommentManagement.scss';
@@ -17,12 +17,7 @@ export default function CommentManagement() {
   const [filterBookId, setFilterBookId] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  useEffect(() => {
-    fetchBooks();
-    fetchComments();
-  }, [filterBookId, filterStatus]);
-
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     try {
       const res = await productService.getAll();
       if (res?.success) {
@@ -31,9 +26,9 @@ export default function CommentManagement() {
     } catch (error) {
       console.error('Error fetching books:', error);
     }
-  };
+  }, []);
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -50,7 +45,13 @@ export default function CommentManagement() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterBookId, filterStatus]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchBooks();
+    fetchComments();
+  }, [filterBookId, filterStatus, fetchBooks, fetchComments]);
 
   const handleDelete = (id, currentStatus) => {
     if (currentStatus === 'deleted') {
@@ -79,21 +80,21 @@ export default function CommentManagement() {
             toast.success('Đã xóa bình luận vĩnh viễn!');
             fetchComments(); // Reload danh sách
           }
-        } catch (error) {
+        } catch {
           toast.error('Lỗi khi xóa bình luận');
         }
       }
     });
   };
 
-  const handleToggleStatus = async (id, currentStatus) => {
+  const handleToggleStatus = async (id) => {
     try {
       const res = await commentService.toggleStatus(id);
       if (res?.success) {
         toast.success(res.message);
         fetchComments();
       }
-    } catch (error) {
+    } catch {
       toast.error('Lỗi khi thay đổi trạng thái bình luận');
     }
   };

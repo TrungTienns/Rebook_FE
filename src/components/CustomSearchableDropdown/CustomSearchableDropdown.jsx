@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import {  useState  } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './CustomSearchableDropdown.scss';
 
 // Custom Dropdown for Cartoon UI with Search
-export default function CustomSearchableDropdown({ value, options, onChange, placeholder, icon, searchable = false }) {
+export default function CustomSearchableDropdown({ value, options, onChange, placeholder, icon, searchable = false, hasError = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   
@@ -14,7 +14,7 @@ export default function CustomSearchableDropdown({ value, options, onChange, pla
     : options;
 
   return (
-    <div className="custom-searchable-dropdown">
+    <div className={`custom-searchable-dropdown ${hasError ? 'error-input' : ''}`}>
       <div className="dropdown-selected" onClick={() => setIsOpen(!isOpen)}>
         {icon && <i className={icon}></i>}
         <span>{selectedOption.label}</span>

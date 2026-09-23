@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import {  useState, useRef, useEffect  } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { path } from '../../common/path';
 import { useAuth } from '../../context/AuthContext';
 import Swal from 'sweetalert2';
@@ -38,17 +38,6 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      fetchNotifications();
-      // Poll notifications every 30 seconds to show red dot in near real-time
-      const interval = setInterval(() => {
-        fetchNotifications();
-      }, 30000);
-      return () => clearInterval(interval);
-    }
-  }, [user]);
-
   const fetchNotifications = async () => {
     try {
       const res = await notificationService.getMyNotifications();
@@ -57,6 +46,18 @@ export default function Header() {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchNotifications();
+      // Poll notifications every 30 seconds to show red dot in near real-time
+      const interval = setInterval(() => {
+        fetchNotifications();
+      }, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
 
   const handleMarkAsRead = async (id) => {
     try {
@@ -88,10 +89,6 @@ export default function Header() {
     }
   };
 
-  const toggleLanguage = () => {
-    const next = i18n.language === 'vi' ? 'en' : 'vi';
-    i18n.changeLanguage(next);
-  };
 
   const timeAgo = (dateStr) => {
     if (!dateStr) return '';

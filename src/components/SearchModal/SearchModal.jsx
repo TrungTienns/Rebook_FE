@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import {  useState, useEffect, useCallback  } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
@@ -23,6 +23,7 @@ export default function SearchModal({ isOpen, onClose }) {
 
   // Sync transcript → searchTerm khi user nói
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (transcript) setSearchTerm(transcript);
   }, [transcript]);
 
@@ -39,26 +40,20 @@ export default function SearchModal({ isOpen, onClose }) {
         language: lang,
       });
     }
-  }, [listening, resetTranscript, i18n.language]);
+  }, [listening, resetTranscript, i18n.language, i18n.resolvedLanguage]);
 
 
   useEffect(() => {
     if (isOpen) {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
       setSearchTerm('');
       setBooks([]);
       resetTranscript();
     } else {
       SpeechRecognition.stopListening();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
-
-  // ── Debounced search ──────────────────────────────────────────────────────
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      handleSearch(searchTerm);
-    }, 300);
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm]);
 
   const handleSearch = async (query) => {
     if (!query.trim()) { setBooks([]); return; }
@@ -72,6 +67,14 @@ export default function SearchModal({ isOpen, onClose }) {
       setLoading(false);
     }
   };
+
+  // ── Debounced search ──────────────────────────────────────────────────────
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      handleSearch(searchTerm);
+    }, 300);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   return (
     <AnimatePresence>

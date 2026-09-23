@@ -28,7 +28,12 @@ axiosClient.interceptors.request.use(
 
 axiosClient.interceptors.response.use(
   (response) => response.data,
-  (error) => Promise.reject(error)
+  (error) => {
+    if (error.response?.status === 401) {
+      window.dispatchEvent(new Event('unauthorized'));
+    }
+    return Promise.reject(error);
+  }
 );
 
 export default axiosClient;

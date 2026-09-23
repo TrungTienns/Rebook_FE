@@ -19,5 +19,7 @@ export const path = {
   ADMIN_RATINGS: '/admin/ratings',
   ADMIN_ANNOUNCEMENTS: '/admin/announcements',
   ADMIN_NOTIFICATIONS: '/admin/notifications',
-  ADMIN_STATISTICS: '/admin/statistics'
+  ADMIN_STATISTICS: '/admin/statistics',
+  ADMIN_AUTHORS: '/admin/authors',
+  AUTHOR_DETAIL: '/author/:id'
 };

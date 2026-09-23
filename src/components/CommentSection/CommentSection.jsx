@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import {  useState, useEffect  } from 'react';
 import { useTranslation } from 'react-i18next';
 import userService from '../../services/userService';
 import { useAuth } from '../../context/AuthContext';
@@ -18,6 +18,7 @@ export default function CommentSection({ bookId }) {
   useEffect(() => {
     if (!bookId) return;
     fetchComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookId]);
 
   const fetchComments = async () => {

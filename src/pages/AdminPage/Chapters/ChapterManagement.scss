@@ -323,7 +323,8 @@
       .lang-tags {
         display: flex;
         gap: 0.4rem;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        min-width: max-content;
       }
 
       .tag {

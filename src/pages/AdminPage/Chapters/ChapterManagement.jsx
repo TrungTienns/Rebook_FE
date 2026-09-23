@@ -47,7 +47,7 @@ export default function ChapterManagement() {
         setChapters(res.data);
         setTotalPages(res.totalPages);
       }
-    } catch (err) {
+    } catch {
       toast.error('Lỗi khi tải danh sách chương');
     } finally {
       setLoading(false);
@@ -55,10 +55,12 @@ export default function ChapterManagement() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchBooks();
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchChapters();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, search, sort, bookIdFilter]);
@@ -78,7 +80,7 @@ export default function ChapterManagement() {
             toast.success('Xóa chương thành công');
             fetchChapters();
           }
-        } catch (err) {
+        } catch {
           toast.error('Lỗi khi xóa chương');
         }
       }

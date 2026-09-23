@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import {  useState, useEffect, useCallback  } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -75,9 +75,41 @@ export default function AllBook() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  useEffect(() => {
-    fetchCategories();
+  const fetchCategories = useCallback(async () => {
+    try {
+      const res = await categoryService.getAll();
+      if (res?.success) {
+        setCategories(res.data);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
   }, []);
+
+  const fetchBooks = useCallback(async () => {
+    try {
+      setLoading(true);
+      const params = {};
+      if (debouncedSearch) params.q = debouncedSearch;
+      if (activeCategory !== 'all') params.category = activeCategory;
+      if (activeType !== 'all') params.type = activeType;
+      if (sortBy !== 'newest') params.sort = sortBy;
+      
+      const res = await productService.getAll(params);
+      if (res?.success) {
+        setBooks(res.data);
+      }
+    } catch (error) {
+      console.error('Error fetching books:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [debouncedSearch, activeCategory, activeType, sortBy]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchCategories();
+  }, [fetchCategories]);
 
   const handleVoiceSearch = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -111,7 +143,8 @@ export default function AllBook() {
     }
   };
 
-  useEffect(() => {
+useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchBooks();
     // Reset page to 1 when filters change
     setCurrentPage(1);
@@ -123,38 +156,8 @@ export default function AllBook() {
     if (activeType !== 'all') params.type = activeType;
     if (sortBy !== 'newest') params.sort = sortBy;
     setSearchParams(params, { replace: true });
-  }, [debouncedSearch, activeCategory, activeType, sortBy]);
+  }, [debouncedSearch, activeCategory, activeType, sortBy, fetchBooks, setSearchParams]);
 
-  const fetchCategories = async () => {
-    try {
-      const res = await categoryService.getAll();
-      if (res?.success) {
-        setCategories(res.data);
-      }
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
-
-  const fetchBooks = async () => {
-    try {
-      setLoading(true);
-      const params = {
-        category: activeCategory,
-        type: activeType,
-        sort: sortBy,
-        q: debouncedSearch
-      };
-      const res = await productService.getAll(params);
-      if (res?.success) {
-        setBooks(res.data);
-      }
-    } catch (error) {
-      console.error('Error fetching books:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Pagination logic
   const totalPages = Math.ceil(books.length / itemsPerPage);

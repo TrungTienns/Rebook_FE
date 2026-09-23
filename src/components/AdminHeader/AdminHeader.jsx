@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { path } from '../../common/path';
@@ -8,7 +7,6 @@ import './AdminHeader.scss';
 export default function AdminHeader() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-
   const handleLogout = () => {
     Swal.fire({
       title: 'Đăng xuất?',

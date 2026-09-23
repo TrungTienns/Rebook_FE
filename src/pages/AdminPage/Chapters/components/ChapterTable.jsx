@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 export default function ChapterTable({ 
   chapters, loading, totalPages, page, setPage, 
   search, setSearch, sort, setSort, 

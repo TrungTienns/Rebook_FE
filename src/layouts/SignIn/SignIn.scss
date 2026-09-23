@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #7b4343;
+  background-color: #dababa;
   padding: 2rem;
   font-family: 'Fredoka', sans-serif;
   
@@ -14,8 +14,8 @@
     width: 100%;
     max-width: 900px;
     min-height: 600px;
-    height: auto; /* Allow the container to grow when errors appear */
-    max-height: 95vh; /* Limit maximum height to viewport */
+    height: auto; 
+    max-height: 95vh; 
     border: $border-width solid $border-dark;
     border-radius: 24px;
     box-shadow: 12px 12px 0px $border-dark;
@@ -25,9 +25,9 @@
     
     @media (max-width: 768px) {
       flex-direction: column;
-      height: auto; /* Allow the container to grow on mobile */
-      max-height: none; /* Remove the 700px limit on mobile */
-      margin: 1rem 0; /* Add some vertical margin so it doesn't touch screen edges when scrolling */
+      height: auto; 
+      max-height: none; 
+      margin: 1rem 0; 
     }
     
     &.reverse {
@@ -43,12 +43,12 @@
   
   .auth-image-col {
     flex: 1;
-    background-color: #d0f0fd; // Soft sky blue for contrast
+    background-color: #d0f0fd; 
     border-right: $border-width solid $border-dark;
     display: flex;
-    align-items: flex-end; /* Align bottom */
-    justify-content: flex-end; /* Align right */
-    padding: 0; /* Remove padding to let it touch the borders */
+    align-items: flex-end; 
+    justify-content: flex-end; 
+    padding: 0; 
     position: relative;
     overflow: hidden;
     
@@ -107,7 +107,7 @@
   .reverse .auth-image-col {
     border-right: none;
     border-left: $border-width solid $border-dark;
-    justify-content: flex-start; /* Mirror: lean left instead of right */
+    justify-content: flex-start; 
     
     .lottie-wrapper {
       right: auto;
@@ -126,7 +126,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow-y: auto; /* Allow scrolling inside the form column if on very small screens */
+    overflow-y: auto; 
     
     @media (max-width: 768px) {
       padding: 2rem;

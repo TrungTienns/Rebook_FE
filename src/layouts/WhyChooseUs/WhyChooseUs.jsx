@@ -1,9 +1,8 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './WhyChooseUs.scss';
-import boyImage from '../../assets/images/boyinachair.png';
-import boySpeakingImage from '../../assets/images/mastery_boy.jpg';
-import discoverBoyImage from '../../assets/images/discover_boy.jpg';
+import boyImage from '../../assets/Images/boyinachair.png';
+import boySpeakingImage from '../../assets/Images/mastery_boy.jpg';
+import discoverBoyImage from '../../assets/Images/discover_boy.jpg';
 
 export default function WhyChooseUs() {
   const { t } = useTranslation();

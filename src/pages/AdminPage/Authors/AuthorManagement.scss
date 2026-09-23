@@ -1,0 +1,529 @@
+@import '../../../styles/variables';
+
+.author-management-container {
+  padding: 1rem;
+
+  .admin-header-box {
+    margin-bottom: 2rem;
+    h1 {
+      font-size: 2.2rem;
+      color: $text-dark;
+      margin-bottom: 0.5rem;
+      i { color: $btn-primary; margin-right: 0.5rem; }
+    }
+    p {
+      color: #666;
+      font-size: 1.1rem;
+      strong { color: $text-dark; }
+    }
+  }
+
+  // ── Shared box style ──────────────────────────────────────────────────────
+  .neo-box {
+    background: $bg-white;
+    border: $border-width solid $border-dark;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 6px 6px 0px $border-dark;
+  }
+
+  // ── Filter Bar ────────────────────────────────────────────────────────────
+  .filter-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+
+    .filter-group.search-box {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex: 1;
+      min-width: 220px;
+
+      i { font-size: 1.2rem; color: #666; }
+
+      input {
+        flex: 1;
+        padding: 0.8rem 1rem;
+        border: $border-width solid $border-dark;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+
+        &:focus {
+          outline: none;
+          box-shadow: 4px 4px 0px $bg-primary;
+          transform: translate(-2px, -2px);
+        }
+      }
+    }
+
+    .btn-add {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.8rem 1.4rem;
+      background: $bg-success;
+      color: $text-dark;
+      border: $border-width solid $border-dark;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px $border-dark;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+
+      &:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0px $border-dark;
+      }
+      &:active {
+        transform: translate(4px, 4px);
+        box-shadow: 0px 0px 0px $border-dark;
+      }
+    }
+  }
+
+  // ── Author Card Grid ──────────────────────────────────────────────────────
+  .authors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .author-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0px $border-dark;
+    }
+
+    .card-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: $border-width solid $border-dark;
+      box-shadow: 3px 3px 0px $border-dark;
+      overflow: hidden;
+      flex-shrink: 0;
+      align-self: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .avatar-fallback {
+        width: 100%;
+        height: 100%;
+        background: $bg-primary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        i { font-size: 2rem; color: $text-dark; }
+      }
+    }
+
+    .card-info {
+      flex: 1;
+      text-align: center;
+
+      .author-name {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: $text-dark;
+        margin-bottom: 0.4rem;
+      }
+
+      .author-country {
+        font-size: 0.9rem;
+        color: #666;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        i { margin-right: 0.3rem; }
+      }
+
+      .author-bio {
+        font-size: 0.88rem;
+        color: #555;
+        line-height: 1.5;
+        max-height: 3.5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-bottom: 0.8rem;
+      }
+
+      .author-stats {
+        display: flex;
+        justify-content: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+
+        .stat-badge {
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
+          padding: 0.3rem 0.7rem;
+          border-radius: 20px;
+          font-size: 0.82rem;
+          font-weight: 800;
+          border: 2px solid $border-dark;
+          background: #f0f0f0;
+          box-shadow: 2px 2px 0px $border-dark;
+          i { color: $btn-primary; }
+
+          &.follower i { color: #e74c3c; }
+        }
+      }
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      padding-top: 0.5rem;
+      border-top: 2px dashed #ddd;
+
+      .btn-action {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: $border-width solid $border-dark;
+        background: $bg-white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 2px 2px 0px $border-dark;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.btn-edit {
+          color: #3498db;
+          &:hover { background: #3498db; color: white; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px $border-dark; }
+        }
+        &.btn-delete {
+          color: #e74c3c;
+          &:hover { background: #e74c3c; color: white; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px $border-dark; }
+        }
+      }
+    }
+  }
+
+  // ── Loading / Empty States ────────────────────────────────────────────────
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem 0;
+    color: #666;
+    i { color: $bg-primary; }
+    p { font-weight: 700; font-size: 1.1rem; }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 4rem 2rem;
+    text-align: center;
+    i { font-size: 4rem; color: #ccc; }
+    h3 { font-size: 1.5rem; }
+    p { color: #666; }
+
+    .btn-add {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.8rem 1.4rem;
+      background: $bg-success;
+      color: $text-dark;
+      border: $border-width solid $border-dark;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px $border-dark;
+      transition: all 0.2s ease;
+      &:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px $border-dark; }
+    }
+  }
+
+  // ── Pagination ────────────────────────────────────────────────────────────
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+
+    button {
+      width: 45px;
+      height: 45px;
+      border-radius: 8px;
+      border: $border-width solid $border-dark;
+      background: $bg-primary;
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 3px 3px 0px $border-dark;
+
+      &:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
+      &:not(:disabled):hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px $border-dark; }
+    }
+
+    .page-info { font-weight: 800; font-size: 1.1rem; }
+  }
+}
+
+// ── Modal Overlay ─────────────────────────────────────────────────────────────
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+
+  .modal-content {
+    background: $bg-white;
+    width: 100%;
+    max-width: 720px;
+    border: $border-width solid $border-dark;
+    border-radius: 16px;
+    box-shadow: 8px 8px 0px $border-dark;
+    overflow: hidden;
+    max-height: 92vh;
+    overflow-y: auto;
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 1.8rem;
+      background: $bg-primary;
+      border-bottom: $border-width solid $border-dark;
+
+      h2 {
+        margin: 0;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+
+      .btn-close {
+        background: transparent;
+        border: none;
+        font-size: 1.4rem;
+        cursor: pointer;
+        color: $text-dark;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: all 0.2s;
+        &:hover { background: rgba(0,0,0,0.1); }
+      }
+    }
+
+    .author-form {
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      .form-layout {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 2rem;
+        align-items: start;
+
+        @media (max-width: 600px) {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      // ── Avatar Dropzone ─────────────────────────────────────────────────
+      .avatar-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          font-weight: 800;
+          font-size: 0.95rem;
+        }
+      }
+
+      .avatar-dropzone {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 3px dashed $border-dark;
+        cursor: pointer;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 4px 4px 0px $border-dark;
+        background: #fafafa;
+        transition: all 0.2s ease;
+
+        &.drag-over, &:hover {
+          border-style: solid;
+          background: rgba(255,215,0,0.1);
+          transform: translate(-2px, -2px);
+          box-shadow: 6px 6px 0px $border-dark;
+        }
+
+        .avatar-preview {
+          width: 100%;
+          height: 100%;
+          position: relative;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+          .avatar-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.2s;
+            i { font-size: 1.5rem; }
+            span { font-size: 0.8rem; font-weight: 700; }
+          }
+          &:hover .avatar-overlay { opacity: 1; }
+        }
+
+        .avatar-placeholder {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          gap: 0.4rem;
+          padding: 1rem;
+          text-align: center;
+          i { font-size: 2rem; color: #bbb; }
+          p { margin: 0; font-size: 0.72rem; font-weight: 600; color: #666; line-height: 1.3; }
+          span { font-size: 0.65rem; color: #999; }
+        }
+      }
+
+      // ── Form Fields ─────────────────────────────────────────────────────
+      .fields-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          font-weight: 800;
+          font-size: 1rem;
+          color: $text-dark;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          i { color: $btn-primary; }
+          .required { color: #e74c3c; }
+        }
+
+        input, textarea {
+          padding: 0.85rem 1rem;
+          border: $border-width solid $border-dark;
+          border-radius: 8px;
+          font-family: inherit;
+          font-size: 1rem;
+          font-weight: 600;
+          background: #fafafa;
+          transition: all 0.2s ease;
+          resize: vertical;
+
+          &:focus {
+            outline: none;
+            background: $bg-white;
+            box-shadow: 4px 4px 0px $bg-primary;
+            transform: translate(-2px, -2px);
+          }
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        padding-top: 0.5rem;
+        border-top: 2px dashed #eee;
+
+        button {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.9rem 1.6rem;
+          border-radius: 10px;
+          border: $border-width solid $border-dark;
+          font-family: inherit;
+          font-size: 1rem;
+          font-weight: 800;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &.btn-cancel {
+            background: #eee;
+            box-shadow: 3px 3px 0px $border-dark;
+            &:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px $border-dark; }
+            &:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px $border-dark; }
+          }
+
+          &.btn-save {
+            background: $bg-primary;
+            box-shadow: 3px 3px 0px $border-dark;
+            &:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px $border-dark; filter: brightness(1.05); }
+            &:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: 0px 0px 0px $border-dark; }
+            &:disabled { opacity: 0.7; cursor: not-allowed; }
+          }
+        }
+      }
+    }
+  }
+}

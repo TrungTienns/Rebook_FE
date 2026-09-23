@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { path } from '../../common/path';
 import Logo from '../Logo/Logo';
@@ -25,7 +24,7 @@ export default function AdminSidebar() {
           className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
         >
           <i className="fa-solid fa-chart-line"></i>
-          <span>Thống kê</span>
+          <span>Statistics</span>
         </NavLink>
 
         <NavLink 
@@ -45,6 +44,14 @@ export default function AdminSidebar() {
         </NavLink>
 
         <NavLink 
+          to={path.ADMIN_AUTHORS} 
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+        >
+          <i className="fa-solid fa-pen-nib"></i>
+          <span>Authors</span>
+        </NavLink>
+
+                <NavLink 
           to={path.ADMIN_CHAPTERS} 
           className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
         >

@@ -48,6 +48,7 @@
     padding: 1.5rem;
     background-color: $bg-white;
     overflow: hidden;
+    min-height: 600px; // Thêm min-height để tránh nhảy layout khi loading
 
     h3 {
       font-family: 'Fredoka', sans-serif;
@@ -233,6 +234,10 @@
   }
 
   .loading-state, .empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
     text-align: center;
     padding: 3rem 0;
     font-family: 'Fredoka', sans-serif;

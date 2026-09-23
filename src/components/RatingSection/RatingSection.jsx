@@ -35,6 +35,7 @@ export default function RatingSection({ bookId }) {
 
   useEffect(() => {
     if (!bookId) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchRatings();
     if (user) fetchMyRating();
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import {  useState  } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -108,7 +108,8 @@ export default function SignInLayout() {
           </motion.div>
           <div className="lottie-wrapper">
             <Lottie 
-              animationData={signInAnimation} 
+              src={signInAnimation} 
+              animationData={signInAnimation}
               autoplay={true}
               loop={true} 
             />

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import {  useState, useEffect  } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axiosClient from '../../services/axiosClient';
 import Header from '../../layouts/Header/Header';
 import Footer from '../../layouts/Footer/Footer';
@@ -203,7 +203,17 @@ export default function BookDetailPage() {
               
               <div className="book-meta">
                 <span className="author">
-                  <i className="fa-solid fa-pen-nib"></i> {book.author?.penName || t('bookDetail.anonymousAuthor')}
+                  <i className="fa-solid fa-pen-nib"></i>
+                  {book.author ? (
+                    <Link
+                      to={`/author/${book.author.id || book.author._id}`}
+                      className="author-tag-link"
+                    >
+                      {book.author.penName}
+                    </Link>
+                  ) : (
+                    <span>{t('bookDetail.anonymousAuthor')}</span>
+                  )}
                 </span>
                 
                 <span className="categories">

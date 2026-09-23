@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import {  useState  } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
@@ -112,7 +112,8 @@ export default function SignUpLayout() {
           </motion.div>
           <div className="lottie-wrapper">
             <Lottie 
-              animationData={signUpAnimation} 
+              src={signUpAnimation} 
+              animationData={signUpAnimation}
               autoplay={true}
               loop={true} 
             />

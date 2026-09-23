@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import {  useState, useEffect, useCallback  } from 'react';
 import ratingService from '../../../services/ratingService';
 import productService from '../../../services/productService';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import './RatingManagement.scss';
@@ -17,12 +17,7 @@ export default function RatingManagement() {
   const [filterBookId, setFilterBookId] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  useEffect(() => {
-    fetchBooks();
-    fetchRatings();
-  }, [filterBookId, filterStatus]);
-
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     try {
       const res = await productService.getAll();
       if (res?.success) {
@@ -31,9 +26,9 @@ export default function RatingManagement() {
     } catch (error) {
       console.error('Error fetching books:', error);
     }
-  };
+  }, []);
 
-  const fetchRatings = async () => {
+  const fetchRatings = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -50,7 +45,13 @@ export default function RatingManagement() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterBookId, filterStatus]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchBooks();
+    fetchRatings();
+  }, [filterBookId, filterStatus, fetchBooks, fetchRatings]);
 
   const handleDelete = (id, currentStatus) => {
     if (currentStatus === 'deleted') {
@@ -79,21 +80,21 @@ export default function RatingManagement() {
             toast.success('Đã xóa đánh giá vĩnh viễn!');
             fetchRatings(); // Reload danh sách
           }
-        } catch (error) {
+        } catch {
           toast.error('Lỗi khi xóa đánh giá');
         }
       }
     });
   };
 
-  const handleToggleStatus = async (id, currentStatus) => {
+  const handleToggleStatus = async (id) => {
     try {
       const res = await ratingService.toggleStatus(id);
       if (res?.success) {
         toast.success(res.message);
         fetchRatings();
       }
-    } catch (error) {
+    } catch {
       toast.error('Lỗi khi thay đổi trạng thái đánh giá');
     }
   };

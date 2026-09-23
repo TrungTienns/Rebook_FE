@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axiosClient from '../../../services/axiosClient';
+import authorService from '../../../services/authorService';
 import './UploadBook.scss';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useDropzone } from 'react-dropzone';
+import CustomSearchableDropdown from '../../../components/CustomSearchableDropdown/CustomSearchableDropdown';
 
 const INITIAL_BOOK_STATE = { 
   title: '', 
   titleEn: '', 
-  authorName: '', 
+  authorId: '', 
   categoryId: '', 
   description: '', 
   coverImage: null, 
@@ -22,6 +24,7 @@ export default function UploadBook() {
   const [activeTab, setActiveTab] = useState('create'); // 'create' hoặc 'manage'
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [authors, setAuthors] = useState([]);
   
   const [bookData, setBookData] = useState(INITIAL_BOOK_STATE);
   const [isEditingBook, setIsEditingBook] = useState(false);
@@ -65,7 +68,7 @@ export default function UploadBook() {
     };
   }, [previewUrl]);
 
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     try {
       const params = {};
       if (searchQuery) params.q = searchQuery;
@@ -81,22 +84,28 @@ export default function UploadBook() {
     } catch {
       console.error('Lỗi khi tải danh sách sách');
     }
-  };
-
-  useEffect(() => {
-    fetchBooks();
   }, [searchQuery, sortFilter, categoryFilter, categories]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchBooks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, sortFilter, categoryFilter, categories]);
+
+  useEffect(() => {
+    const fetchCategoriesAndAuthors = async () => {
       try {
-        const res = await axiosClient.get('/categories');
-        if (res?.success) setCategories(res.data);
+        const [catRes, authRes] = await Promise.all([
+          axiosClient.get('/categories'),
+          authorService.getAll({ limit: 1000 })
+        ]);
+        if (catRes?.success) setCategories(catRes.data);
+        if (authRes?.success) setAuthors(authRes.data);
       } catch {
-        console.error('Lỗi khi tải thể loại');
+        console.error('Lỗi khi tải dữ liệu phụ trợ');
       }
     };
-    fetchCategories();
+    fetchCategoriesAndAuthors();
   }, []);
 
   const handleBookSubmit = async (e) => {
@@ -119,7 +128,7 @@ export default function UploadBook() {
     const formData = new FormData();
     formData.append('title', bookData.title);
     if (bookData.titleEn) formData.append('titleEn', bookData.titleEn);
-    if (bookData.authorName) formData.append('authorName', bookData.authorName); 
+    if (bookData.authorId) formData.append('authorId', bookData.authorId); 
     if (bookData.categoryId) formData.append('categoryId', bookData.categoryId); 
     formData.append('description', bookData.description);
     formData.append('isVip', bookData.isVip);
@@ -185,7 +194,7 @@ export default function UploadBook() {
       ...INITIAL_BOOK_STATE,
       title: book.title || '',
       titleEn: book.titleEn || '',
-      authorName: book.author?.penName || '',
+      authorId: book.author?.id || book.authorId || '',
       categoryId: book.categories?.[0]?.id || '',
       description: book.description || '',
       isVip: book.isVip ? 'true' : 'false',
@@ -267,36 +276,47 @@ export default function UploadBook() {
               </div>
               <div className="col">
                 <label>Tác Giả</label>
-                <input type="text" className={errors.authorName ? 'error-input' : ''} value={bookData.authorName} onChange={e => { setBookData({...bookData, authorName: e.target.value}); setErrors({...errors, authorName: false}); }} placeholder="Nhập tên tác giả..." />
+                <CustomSearchableDropdown 
+                  searchable={true}
+                  hasError={errors.authorId}
+                  value={bookData.authorId} 
+                  onChange={val => { setBookData({...bookData, authorId: val}); setErrors({...errors, authorId: false}); }}
+                  options={authors.map(author => ({ label: author.penName, value: author.id }))}
+                  placeholder="-- Chọn tác giả --"
+                />
               </div>
               <div className="col">
                 <label>Thể Loại</label>
-                <select className={errors.categoryId ? 'error-input' : ''} value={bookData.categoryId} onChange={e => { setBookData({...bookData, categoryId: e.target.value}); setErrors({...errors, categoryId: false}); }} required>
-                  <option value="">-- Chọn thể loại chính --</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                  ))}
-                </select>
+                <CustomSearchableDropdown 
+                  searchable={true}
+                  hasError={errors.categoryId}
+                  value={bookData.categoryId} 
+                  onChange={val => { setBookData({...bookData, categoryId: val}); setErrors({...errors, categoryId: false}); }}
+                  options={categories.map(cat => ({ label: cat.name, value: cat.id }))}
+                  placeholder="-- Chọn thể loại chính --"
+                />
               </div>
             </div>
             
             <div className="form-group row-group" style={{ marginBottom: '1.5rem' }}>
               <div className="col">
                 <label>Loại Sách</label>
-                <select 
+                <CustomSearchableDropdown 
+                  searchable={false}
                   value={bookData.isVip} 
-                  onChange={e => { 
-                    const isVipValue = e.target.value;
+                  onChange={val => { 
                     setBookData({
                       ...bookData, 
-                      isVip: isVipValue, 
-                      vipPrice: isVipValue === 'false' ? 0 : bookData.vipPrice 
+                      isVip: val, 
+                      vipPrice: val === 'false' ? 0 : bookData.vipPrice 
                     }); 
                   }}
-                >
-                  <option value="false">Miễn Phí (Free)</option>
-                  <option value="true">Sách VIP</option>
-                </select>
+                  options={[
+                    { label: 'Miễn Phí (Free)', value: 'false' },
+                    { label: 'Sách VIP', value: 'true' }
+                  ]}
+                  placeholder="-- Chọn loại sách --"
+                />
               </div>
               <div className="col">
                 <label>Giá VIP (Xu) {bookData.isVip === 'false' && <small>(Khóa)</small>}</label>
@@ -311,13 +331,16 @@ export default function UploadBook() {
               </div>
               <div className="col">
                 <label>Trạng Thái Truyện</label>
-                <select 
+                <CustomSearchableDropdown 
+                  searchable={false}
                   value={bookData.status} 
-                  onChange={e => setBookData({...bookData, status: e.target.value})}
-                >
-                  <option value="ongoing">Đang Ra (Ongoing)</option>
-                  <option value="completed">Đã Hoàn Thành (Completed)</option>
-                </select>
+                  onChange={val => setBookData({...bookData, status: val})}
+                  options={[
+                    { label: 'Đang Ra (Ongoing)', value: 'ongoing' },
+                    { label: 'Đã Hoàn Thành (Completed)', value: 'completed' }
+                  ]}
+                  placeholder="-- Chọn trạng thái --"
+                />
               </div>
             </div>
             <div className="form-group">
@@ -406,6 +429,7 @@ export default function UploadBook() {
                     <th>Sách</th>
                     <th>Tác Giả</th>
                     <th>Chương</th>
+                    <th>Loại</th>
                     <th>Trạng Thái</th>
                     <th>Hành Động</th>
                   </tr>
@@ -423,16 +447,6 @@ export default function UploadBook() {
                               <i className="fa-solid fa-image" style={{color: '#999'}}></i>
                             </div>
                           )}
-                          {book.isVip && (
-                            <div className="vip-badge" style={{ position: 'absolute', top: 5, right: 5, background: '#ffc107', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                              <i className="fa-solid fa-crown"></i> VIP
-                            </div>
-                          )}
-                          {book.status === 'completed' && (
-                            <div className="status-badge" style={{ position: 'absolute', top: 5, left: 5, background: '#2ed573', color: 'white', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                              <i className="fa-solid fa-check-circle"></i> Hoàn Thành
-                            </div>
-                          )}
                         </div>
                         <span>{book.title}</span>
                       </td>
@@ -440,6 +454,11 @@ export default function UploadBook() {
                       <td><b>{book.totalChapters || 0}</b></td>
                       <td>
                         {book.isVip ? <span className="tag tag-vip"><i className="fa-solid fa-crown"></i> VIP</span> : <span className="tag tag-free">Free</span>}
+                      </td>
+                      <td>
+                        {book.status === 'completed' 
+                          ? <span className="tag tag-completed"><i className="fa-solid fa-check-circle"></i> Hoàn Thành</span> 
+                          : <span className="tag tag-ongoing"><i className="fa-solid fa-spinner"></i> Đang Ra</span>}
                       </td>
                       <td>
                         <div className="action-btns">
@@ -455,7 +474,7 @@ export default function UploadBook() {
                   ))}
                   {books.length === 0 && (
                     <tr>
-                      <td colSpan="6" style={{textAlign: 'center', padding: '2rem'}}>Chưa có cuốn sách nào. Hãy tạo mới!</td>
+                      <td colSpan="7" style={{textAlign: 'center', padding: '2rem'}}>Chưa có cuốn sách nào. Hãy tạo mới!</td>
                     </tr>
                   )}
                 </tbody>

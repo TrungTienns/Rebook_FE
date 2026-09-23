@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef, Fragment } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import './Banner.scss';
@@ -108,7 +108,7 @@ export default function Banner() {
                 <div className="book-title-plate">
                   <div className="book-title">
                     {t('banner.bookTitle').split('\n').map((line, i) => (
-                      <React.Fragment key={i}>{line}{i === 0 && <br />}</React.Fragment>
+                      <Fragment key={i}>{line}{i === 0 && <br />}</Fragment>
                     ))}
                   </div>
                   <div className="book-subtitle">{t('banner.bookSubtitle')}</div>
